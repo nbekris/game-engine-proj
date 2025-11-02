@@ -1,10 +1,11 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	EntityContainer.cpp
+// File Name:	BehaviorTeleporter.cpp
 // Author(s):	bekri
 // Course:		CS529F25
-// Project:		Project 1
-// Purpose:		Template for a new .cpp file.
+// Project:		Project 4
+// Purpose:		This derived class is responsible for the behavior associated
+//   with a "template" entity.
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
 //
@@ -15,8 +16,11 @@
 //------------------------------------------------------------------------------
 
 #include "Precompiled.h"
-#include "EntityContainer.h"
+
 #include "Entity.h"
+#include "Behavior.h"
+#include "BehaviorTeleporter.h"
+#include "Stream.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -62,16 +66,14 @@ namespace CS529
 
 #pragma region Constructors
 
-	EntityContainer::EntityContainer()
+	BehaviorTeleporter::BehaviorTeleporter(void)
+		: Behavior()
 	{
-		entities.reserve(100);
 	}
 
-	//--------------------------------------------------------------------------
-
-	EntityContainer::~EntityContainer()
+	BehaviorTeleporter::BehaviorTeleporter(const BehaviorTeleporter* other)
+		: Behavior(other)
 	{
-		DeleteAll();
 	}
 
 #pragma endregion Constructors
@@ -88,59 +90,6 @@ namespace CS529
 	// Public Functions:
 	//--------------------------------------------------------------------------
 
-	void EntityContainer::Update(float dt) 
-	{
-		for (Entity* entity : entities)
-		{
-			entity->Update(dt);
-		}
-
-		for (int i = 0; i < entities.size(); ++i)
-		{
-			Entity* entity = entities[i];
-			if (entity->IsDestroyed())
-			{
-				delete entity;
-				entity = nullptr;
-
-				entities.erase(entities.begin() + i);
-			}
-		}
-	}
-
-	void EntityContainer::Render() const
-	{
-		for (Entity* entity : entities)
-		{
-			entity->Render();
-		}
-	}
-
-	Entity* EntityContainer::FindByName(std::string_view findName) const
-	{
-		for (Entity* entity : entities)
-		{
-			if (entity->IsNamed(findName))
-			{
-				return entity;
-			}
-		}
-		return nullptr;
-	}
-
-	void EntityContainer::CheckCollisions() const
-	{
-	}
-
-	void EntityContainer::DeleteAll()
-	{
-		for (Entity* entity : entities)
-		{
-			delete entity;
-			entity = nullptr;
-		}
-		entities.clear();
-	}
 #pragma region Public Functions
 
 #pragma endregion Public Functions
@@ -150,6 +99,55 @@ namespace CS529
 	//--------------------------------------------------------------------------
 
 #pragma region Private Functions
+
+	void BehaviorTeleporter::Read(Stream& stream)
+	{
+		stream.PushNode("BehaviorTeleporter");
+
+		// Read the base Behavior variables.
+		// [HINT: Behavior::Read().]
+		Behavior::Read(stream);
+
+		// Read the derived class Behavior variables, if any.
+
+		stream.PopNode();
+	}
+
+	void BehaviorTeleporter::onInit()
+	{
+		switch (stateCurr)
+		{
+		case cIdle:
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	void BehaviorTeleporter::onUpdate(float dt)
+	{
+		switch (stateCurr)
+		{
+		case cIdle:
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	void BehaviorTeleporter::onExit()
+	{
+		switch (stateCurr)
+		{
+		case cIdle:
+			break;
+
+		default:
+			break;
+		}
+	}
 
 #pragma endregion Private Functions
 

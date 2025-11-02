@@ -41,6 +41,8 @@ namespace CS529
 	public:
 		EntityContainer();
 
+		~EntityContainer();
+
 		// Constructors/Destructors:
 	public:
 

@@ -213,15 +213,7 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="Source\BehaviorAsteroid.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
     <ClCompile Include="Source\BehaviorBullet.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="Source\BehaviorHudText.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -237,15 +229,6 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="Source\Collider.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="Source\ColliderCircle.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="Source\Color.cpp" />
     <ClCompile Include="Source\Component.cpp" />
     <ClCompile Include="Source\Container.cpp">
       <SubType>
@@ -341,7 +324,10 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="Source\SpriteSourceLibrary.cpp" />
+    <ClCompile Include="Source\SpriteSourceLibrary.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Source\Stream.cpp">
       <SubType>
       </SubType>
@@ -381,15 +367,7 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Source\BehaviorAsteroid.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="Source\BehaviorBullet.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="Source\BehaviorHudText.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -405,15 +383,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Source\Collider.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="Source\ColliderCircle.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="Source\Color.h" />
     <ClInclude Include="Source\Component.h" />
     <ClInclude Include="Source\Container.h">
       <SubType>

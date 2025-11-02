@@ -46,6 +46,8 @@ namespace CS529
 		// @brief The EntityFactory is entirely static, so the constructor has been made private.
 		EntityFactory(void);
 
+		~EntityFactory(void);
+
 		// Public Static Functions:
 	public:
 		// @brief Build a new entity using deserialization.

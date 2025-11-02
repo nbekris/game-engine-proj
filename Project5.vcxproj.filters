@@ -115,9 +115,6 @@
     <ClCompile Include="Source\Component.cpp">
       <Filter>Source Files\Engine\Entities\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Container.cpp">
-      <Filter>Source Files\Engine\Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Source\LoggingSystem.cpp">
       <Filter>Source Files\Engine\Systems\Logging</Filter>
     </ClCompile>
@@ -217,29 +214,17 @@
     <ClCompile Include="Source\BehaviorTeleporter.cpp">
       <Filter>Source Files\Game\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Random.cpp">
+    <ClCompile Include="Source\Container.cpp">
       <Filter>Source Files\Engine\Framework</Filter>
     </ClCompile>
     <ClCompile Include="Source\SpriteSourceLibrary.cpp">
       <Filter>Source Files\Engine\Entities\Components\Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Color.cpp">
+    <ClCompile Include="Source\Random.cpp">
       <Filter>Source Files\Engine\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BehaviorAsteroid.cpp">
-      <Filter>Source Files\Game\Behaviors</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Collider.cpp">
-      <Filter>Source Files\Engine\Entities\Components\Collider</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ColliderCircle.cpp">
-      <Filter>Source Files\Engine\Entities\Components\Collider</Filter>
     </ClCompile>
     <ClCompile Include="Source\ScoreSystem.cpp">
       <Filter>Source Files\Game\Systems\Score</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BehaviorHudText.cpp">
-      <Filter>Source Files\Game\Behaviors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -375,31 +360,16 @@
     <ClInclude Include="Source\BehaviorBullet.h">
       <Filter>Source Files\Game\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\BehaviorTeleporter.h">
-      <Filter>Source Files\Game\Behaviors</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Random.h">
       <Filter>Source Files\Engine\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Source\SpriteSourceLibrary.h">
       <Filter>Source Files\Engine\Entities\Components\Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Color.h">
-      <Filter>Source Files\Engine\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BehaviorAsteroid.h">
-      <Filter>Source Files\Game\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collider.h">
-      <Filter>Source Files\Engine\Entities\Components\Collider</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ColliderCircle.h">
-      <Filter>Source Files\Engine\Entities\Components\Collider</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ScoreSystem.h">
       <Filter>Source Files\Game\Systems\Score</Filter>
     </ClInclude>
-    <ClInclude Include="Source\BehaviorHudText.h">
+    <ClInclude Include="Source\BehaviorTeleporter.h">
       <Filter>Source Files\Game\Behaviors</Filter>
     </ClInclude>
   </ItemGroup>

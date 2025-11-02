@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	EntityContainer.cpp
+// File Name:	Container.cpp
 // Author(s):	bekri
 // Course:		CS529F25
 // Project:		Project 1
@@ -15,8 +15,7 @@
 //------------------------------------------------------------------------------
 
 #include "Precompiled.h"
-#include "EntityContainer.h"
-#include "Entity.h"
+#include "Container.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -62,17 +61,8 @@ namespace CS529
 
 #pragma region Constructors
 
-	EntityContainer::EntityContainer()
-	{
-		entities.reserve(100);
-	}
-
 	//--------------------------------------------------------------------------
 
-	EntityContainer::~EntityContainer()
-	{
-		DeleteAll();
-	}
 
 #pragma endregion Constructors
 
@@ -88,59 +78,6 @@ namespace CS529
 	// Public Functions:
 	//--------------------------------------------------------------------------
 
-	void EntityContainer::Update(float dt) 
-	{
-		for (Entity* entity : entities)
-		{
-			entity->Update(dt);
-		}
-
-		for (int i = 0; i < entities.size(); ++i)
-		{
-			Entity* entity = entities[i];
-			if (entity->IsDestroyed())
-			{
-				delete entity;
-				entity = nullptr;
-
-				entities.erase(entities.begin() + i);
-			}
-		}
-	}
-
-	void EntityContainer::Render() const
-	{
-		for (Entity* entity : entities)
-		{
-			entity->Render();
-		}
-	}
-
-	Entity* EntityContainer::FindByName(std::string_view findName) const
-	{
-		for (Entity* entity : entities)
-		{
-			if (entity->IsNamed(findName))
-			{
-				return entity;
-			}
-		}
-		return nullptr;
-	}
-
-	void EntityContainer::CheckCollisions() const
-	{
-	}
-
-	void EntityContainer::DeleteAll()
-	{
-		for (Entity* entity : entities)
-		{
-			delete entity;
-			entity = nullptr;
-		}
-		entities.clear();
-	}
 #pragma region Public Functions
 
 #pragma endregion Public Functions
