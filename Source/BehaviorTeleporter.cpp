@@ -21,6 +21,10 @@
 #include "Behavior.h"
 #include "BehaviorTeleporter.h"
 #include "Stream.h"
+#include "Vector2D.h"
+#include "Transform.h"
+#include "Physics.h"
+#include <iostream>
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -135,6 +139,8 @@ namespace CS529
 		default:
 			break;
 		}
+
+		CheckPosition();
 	}
 
 	void BehaviorTeleporter::onExit()
@@ -147,6 +153,44 @@ namespace CS529
 		default:
 			break;
 		}
+	}
+
+	void BehaviorTeleporter::CheckPosition()
+	{
+		// Get dimensions of window, then scale to get window half size to test against
+		DGL_Vec2 windowSize = DGL_Window_GetSize();
+		Vector2D wHalfSize(windowSize.x, windowSize.y);
+		wHalfSize.Scale(0.5f);
+
+		Transform* transform = Parent()->Get<Transform>();
+		Physics* physics = Parent()->Get<Physics>();
+
+		Vector2D velocity(physics->Velocity());
+		Vector2D pos(transform->Translation());
+
+		// Check if entity has reached screen boundaries, top, left, bottom, right
+		if (pos.x < -wHalfSize.x)
+		{
+			Teleport(pos, transform);
+		}
+		else if (pos.x > wHalfSize.x)
+		{
+			Teleport(pos, transform);
+		}
+		else if (pos.y < -wHalfSize.y) 
+		{
+			Teleport(pos, transform);
+		}
+		else if (pos.y > wHalfSize.y)
+		{
+			Teleport(pos, transform);
+		}
+	}
+
+	void BehaviorTeleporter::Teleport(Vector2D pos, Transform* transform)
+	{
+		pos.Scale(-1);
+		transform->Translation(pos);
 	}
 
 #pragma endregion Private Functions

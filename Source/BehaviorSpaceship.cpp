@@ -210,7 +210,7 @@ namespace CS529
 			float speed = velocity.Length();
 			if (speed > spaceshipSpeedMax)
 			{
-				velocity.ScaleAdd(spaceshipSpeedMax / speed, velocity);
+				velocity.Scale(spaceshipSpeedMax / speed);
 			}
 
 			physics->Velocity(velocity);

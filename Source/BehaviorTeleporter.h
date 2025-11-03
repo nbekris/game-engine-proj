@@ -18,6 +18,8 @@
 //------------------------------------------------------------------------------
 
 #include "Behavior.h"
+#include "Vector2D.h"
+#include "Transform.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -65,6 +67,8 @@ namespace CS529
 	private:
 		// @brief This function is required to invoke the copy-constructor in derived classes.
 		BehaviorTeleporter* Clone() const override { return new BehaviorTeleporter(this); }
+		void CheckPosition();
+		void Teleport(Vector2D pos, Transform* transform);
 
 		// Behavior Finite-State Machine (FSM) functions.
 		void onInit() override;
