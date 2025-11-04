@@ -90,7 +90,7 @@ namespace CS529
 		//
 		// @param key = The key associated with the array (AKA value) to be read.
 		// @param lambda = A function to be called for each item in the array.
-		void ReadArray(std::string_view key, std::function<void(const std::string& key)> lambda);
+		void ReadArray(std::string_view key, std::function<void()> lambda);
 
 		// @brief Reads the contents of an object by iterating through the key:value pairs.
 		// @brief Specific Steps:

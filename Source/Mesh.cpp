@@ -189,7 +189,7 @@ namespace CS529
 						DGL_Graphics_AddVertex(&pos, &dglColor, &uvOffsets);
 					};
 				DGL_Graphics_StartMesh();
-				stream.ReadArray("Vertices", lambda());
+				stream.ReadArray("Vertices", lambda);
 			}
 			stream.PopNode();
 		}
