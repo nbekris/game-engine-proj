@@ -78,6 +78,22 @@ namespace CS529
 		return dataNode->contains(key);
 	}
 
+	void Stream::ReadArray(std::string_view key, std::function<void(const std::string& key)> lambda)
+	{
+		if (Contains(key))
+		{
+			PushNode(key);
+			for (auto& [componentKey, componentValue] : dataNode->items())
+			{
+				PushNode(componentKey);
+				lambda(componentKey);
+				PopNode();
+			}
+			PopNode();
+			
+		}
+	}
+
 	void Stream::ReadObject(std::string_view key, std::function<void(const std::string& key)> lambda)
 	{
 		if (Contains(key))

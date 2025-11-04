@@ -148,6 +148,12 @@ namespace CS529
 		assert(meshResource && "Failed to create mesh!");
 	}
 
+	void Mesh::BuildAsteroid()
+	{
+		//DGL_Graphics_StartMesh();
+		// TODO READ MESH
+	}
+
 	void Mesh::Render() const
 	{
 		if (meshResource)
