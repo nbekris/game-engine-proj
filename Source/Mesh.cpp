@@ -172,9 +172,24 @@ namespace CS529
 			{
 				BuildSpaceship();
 			}
-			else
+			else if (stream.Contains("Vertices"))
 			{
-				LoggingSystem::Verbose("Warning: Could not find mesh name: ", name);
+				auto lambda = [stream]() 
+					{ 
+						Vector2D pos;
+						Vector2D uvOffsets;
+						std::vector<float> color;
+						stream.ReadVector2D("Position", pos);
+						stream.ReadVector2D("UV", uvOffsets);
+						for (int i = 0; i <= 2; ++i)
+						{
+							stream.Read("Color", color[i]);
+						}
+						const DGL_Color dglColor = { color[0], color[1], color[2], 0.0 };
+						DGL_Graphics_AddVertex(&pos, &dglColor, &uvOffsets);
+					};
+				DGL_Graphics_StartMesh();
+				stream.ReadArray("Vertices", lambda());
 			}
 			stream.PopNode();
 		}
