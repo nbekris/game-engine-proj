@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	AsteroidsScene.cpp
+// File Name:	Color.cpp
 // Author(s):	bekri
 // Course:		CS529F25
 // Project:		Project 1
-// Purpose:		Template class for a new scene.
+// Purpose:		Template for a new .cpp file.
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
 //
@@ -15,18 +15,7 @@
 //------------------------------------------------------------------------------
 
 #include "Precompiled.h"
-#include <Windows.h>
-
-#include "AsteroidsScene.h"
-#include "Scene.h"
-#include "SceneSystem.h"
-
-#include "EntityFactory.h"
-#include "MeshLibrary.h"
-#include "Mesh.h"
-#include "Entity.h"
-#include "Transform.h"
-#include "Sprite.h"
+#include "Color.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -53,7 +42,7 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Private Static Constants:
 	//--------------------------------------------------------------------------
-	static const DGL_Color DGL_Color_Black = { 0.0f, 0.0f, 0.0f, 1.0f };
+
 	//--------------------------------------------------------------------------
 	// Private Constants:
 	//--------------------------------------------------------------------------
@@ -72,10 +61,15 @@ namespace CS529
 
 #pragma region Constructors
 
-	AsteroidsScene::AsteroidsScene()
-		: Scene("AsteroidsScene")
+	Color::Color(void) : r(1.0f), g(1.0f), b(1.0f), a((1.0f))
 	{
 	}
+
+	Color::Color(float _r, float _g, float _b, float _a) : r(_r), g(_g), b(_b), a(_a)
+	{
+	}
+
+	//--------------------------------------------------------------------------
 
 #pragma endregion Constructors
 
@@ -100,72 +94,6 @@ namespace CS529
 	//--------------------------------------------------------------------------
 
 #pragma region Private Functions
-
-	void AsteroidsScene::Load()
-	{
-		asteroidSpawnCount = asteroidSpawnInitial;
-	}
-
-	bool AsteroidsScene::Initialize()
-	{
-		Entity* entity = EntityFactory::Build("Spaceship");
-		if (entity)
-		{
-			AddEntity(entity);
-			entity->Get<Transform>()->Translation({ 0.0f, 0.0f }); // set spaceship to start position
-		}
-
-		DGL_Graphics_SetBackgroundColor(&DGL_Color_Black);
-		DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
-
-		return true;
-	}
-
-	void AsteroidsScene::Update(float dt)
-	{
-		// Tell the compiler that the 'dt' variable is unused.
-		UNREFERENCED_PARAMETER(dt);
-
-		UpdateEntities(dt);
-
-		if (FindEntity("Asteroid"))
-		{
-			SpawnWave();
-		}
-
-		// NOTE: This call causes the engine to exit immediately.
-		//   Make sure to remove it when you are ready to test out a new scene.
-	}
-
-	void AsteroidsScene::Render() const
-	{
-		RenderEntities();
-	}
-
-	void AsteroidsScene::Shutdown()
-	{
-		DeleteEntities();
-		EntityFactory::DeleteAll();
-	}
-
-	void AsteroidsScene::Unload()
-	{
-		MeshLibrary::DeleteAll();
-	}
-
-	void AsteroidsScene::SpawnWave()
-	{
-		while (asteroidSpawnCount < asteroidSpawnMaximum) // this probably needs to be changed
-		{
-			SpawnAsteroid();
-			++asteroidSpawnCount;
-		}
-	}
-
-	void AsteroidsScene::SpawnAsteroid()
-	{
-		AddEntity(EntityFactory::Build("Asteroid"));
-	}
 
 #pragma endregion Private Functions
 

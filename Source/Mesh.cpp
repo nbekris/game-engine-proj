@@ -190,6 +190,15 @@ namespace CS529
 					};
 				DGL_Graphics_StartMesh();
 				stream.ReadArray("Vertices", lambda);
+				DGL_Graphics_EndMesh;
+			}
+			else if (stream.Contains("Quad"))
+			{
+				unsigned int numCols;
+				unsigned int numRows;
+				stream.Read("NumCols", numCols);
+				stream.Read("NumRows", numRows);
+				// BuildQuad();
 			}
 			stream.PopNode();
 		}

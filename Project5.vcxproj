@@ -229,6 +229,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Source\Color.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Source\Component.cpp" />
     <ClCompile Include="Source\Container.cpp">
       <SubType>
@@ -383,6 +387,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Source\Color.h" />
     <ClInclude Include="Source\Component.h" />
     <ClInclude Include="Source\Container.h">
       <SubType>

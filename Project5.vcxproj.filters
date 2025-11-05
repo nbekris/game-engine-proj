@@ -226,6 +226,9 @@
     <ClCompile Include="Source\ScoreSystem.cpp">
       <Filter>Source Files\Game\Systems\Score</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Color.cpp">
+      <Filter>Source Files\Engine\Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Precompiled.h">
@@ -371,6 +374,9 @@
     </ClInclude>
     <ClInclude Include="Source\BehaviorTeleporter.h">
       <Filter>Source Files\Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Color.h">
+      <Filter>Source Files\Engine\Framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
