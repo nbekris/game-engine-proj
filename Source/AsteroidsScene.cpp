@@ -126,13 +126,14 @@ namespace CS529
 		// Tell the compiler that the 'dt' variable is unused.
 		UNREFERENCED_PARAMETER(dt);
 
-		UpdateEntities(dt);
-
-		if (FindEntity("Asteroid"))
+		if (!FindEntity("Asteroid"))
 		{
 			SpawnWave();
 		}
 
+		UpdateEntities(dt);
+
+		CheckCollisions();
 		// NOTE: This call causes the engine to exit immediately.
 		//   Make sure to remove it when you are ready to test out a new scene.
 	}
@@ -164,7 +165,12 @@ namespace CS529
 
 	void AsteroidsScene::SpawnAsteroid()
 	{
-		AddEntity(EntityFactory::Build("Asteroid"));
+		Entity* entity = EntityFactory::Build("Asteroid");
+		if (entity) //should add spawn entity function
+		{
+			AddEntity(entity);
+			entity->Get<Transform>()->Translation({ 0.0f, 0.0f });
+		}
 	}
 
 #pragma endregion Private Functions

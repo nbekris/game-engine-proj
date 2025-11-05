@@ -174,23 +174,20 @@ namespace CS529
 			}
 			else if (stream.Contains("Vertices"))
 			{
-				auto lambda = [stream]() 
-					{ 
-						Vector2D pos;
+				auto lambda = [&stream]() 
+					{
+						Vector2D position;
 						Vector2D uvOffsets;
-						std::vector<float> color;
-						stream.ReadVector2D("Position", pos);
+						std::vector<float> color(3);
+						stream.ReadVector2D("Position", position);
 						stream.ReadVector2D("UV", uvOffsets);
-						for (int i = 0; i <= 2; ++i)
-						{
-							stream.Read("Color", color[i]);
-						}
-						const DGL_Color dglColor = { color[0], color[1], color[2], 0.0 };
-						DGL_Graphics_AddVertex(&pos, &dglColor, &uvOffsets);
+						stream.Read("Color", color);
+						const DGL_Color dglColor = { color[0], color[1], color[2], 1.0 };
+						DGL_Graphics_AddVertex(&position, &dglColor, &uvOffsets);
 					};
 				DGL_Graphics_StartMesh();
 				stream.ReadArray("Vertices", lambda);
-				DGL_Graphics_EndMesh;
+				DGL_Graphics_EndMesh();
 			}
 			else if (stream.Contains("Quad"))
 			{
@@ -199,6 +196,10 @@ namespace CS529
 				stream.Read("NumCols", numCols);
 				stream.Read("NumRows", numRows);
 				// BuildQuad();
+			}
+			else
+			{
+				//log error message
 			}
 			stream.PopNode();
 		}

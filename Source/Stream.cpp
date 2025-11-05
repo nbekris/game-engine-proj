@@ -83,10 +83,11 @@ namespace CS529
 		if (Contains(key))
 		{
 			PushNode(key);
-			for (auto& [key, value] : dataNode->items())
+			for (auto& item : dataNode->items())
 			{
-				PushNode(key);
-				lambda;
+				dataStack.push_back(dataNode);
+				dataNode = &item.value();
+				lambda();
 				PopNode();
 			}
 			PopNode();

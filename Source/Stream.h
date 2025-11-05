@@ -22,6 +22,7 @@
 #include <functional>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include <nlohmann/json.hpp>
 #include <dragon/assert.h>
@@ -129,11 +130,17 @@ namespace CS529
 			// This function should never be called without a valid stream.
 			DRAGON_ASSERT(isValid, "Stream: Attempted read of invalid stream.");
 
+			if (key == "Position")
+			{
+				std::cout << dataNode->dump(0) << std::endl;
+			}
+
 			// Attempt to read data from the JSON object.
 			try
 			{
 				std::vector<float> v;
 				dataNode->at(key).get_to(v);
+				//std::cout << "currently at dataNode : " << dataNode->at(key) << "\n";
 
 				value.x = v[0];
 				value.y = v[1];
