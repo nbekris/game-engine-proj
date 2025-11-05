@@ -187,7 +187,9 @@ namespace CS529
 					};
 				DGL_Graphics_StartMesh();
 				stream.ReadArray("Vertices", lambda);
-				DGL_Graphics_EndMesh();
+				meshResource = DGL_Graphics_EndMesh();
+
+				assert(meshResource && "Failed to create mesh!");
 			}
 			else if (stream.Contains("Quad"))
 			{
