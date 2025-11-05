@@ -213,6 +213,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Source\BehaviorAsteroid.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Source\BehaviorBullet.cpp">
       <SubType>
       </SubType>
@@ -368,6 +372,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Source\Behavior.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Source\BehaviorAsteroid.h">
       <SubType>
       </SubType>
     </ClInclude>

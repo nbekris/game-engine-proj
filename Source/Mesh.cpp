@@ -178,7 +178,7 @@ namespace CS529
 					{
 						Vector2D position;
 						Vector2D uvOffsets;
-						std::vector<float> color(3);
+						std::vector<float> color(4);
 						stream.ReadVector2D("Position", position);
 						stream.ReadVector2D("UV", uvOffsets);
 						stream.Read("Color", color);

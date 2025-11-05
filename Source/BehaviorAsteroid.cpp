@@ -1,13 +1,13 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	Random.cpp
+// File Name:	BehaviorAsteroid.cpp
 // Author(s):	bekri
 // Course:		CS529F25
-// Project:		Project 1
-// Purpose:		Template for a new .cpp file.
+// Project:		Project 4
+// Purpose:		This derived class is responsible for the behavior associated
+//   with a "template" entity.
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
-// sources: https://learn.microsoft.com/en-us/cpp/standard-library/random
 //
 //------------------------------------------------------------------------------
 
@@ -16,9 +16,12 @@
 //------------------------------------------------------------------------------
 
 #include "Precompiled.h"
+
+#include "Entity.h"
+#include "Behavior.h"
+#include "BehaviorAsteroid.h"
+#include "Stream.h"
 #include "Random.h"
-#include <ctime>
-#include <iostream>
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -52,8 +55,8 @@ namespace CS529
 
 	//--------------------------------------------------------------------------
 	// Private Static Variables:
-	// -----------------------------------------------------------
-	std::mt19937 Random::generator;
+	//--------------------------------------------------------------------------
+
 	//--------------------------------------------------------------------------
 	// Private Variables:
 	//--------------------------------------------------------------------------
@@ -64,13 +67,13 @@ namespace CS529
 
 #pragma region Constructors
 
-	Random::Random(void)
+	BehaviorAsteroid::BehaviorAsteroid(void)
+		: Behavior()
 	{
 	}
 
-	//--------------------------------------------------------------------------
-
-	Random::~Random(void)
+	BehaviorAsteroid::BehaviorAsteroid(const BehaviorAsteroid* other)
+		: Behavior(other)
 	{
 	}
 
@@ -82,28 +85,12 @@ namespace CS529
 
 #pragma region Public Static Functions
 
-
 #pragma endregion Public Static Functions
 
 	//--------------------------------------------------------------------------
 	// Public Functions:
 	//--------------------------------------------------------------------------
-	void Random::Initialize()
-	{
-		std::mt19937 generator(time(nullptr));
-	}
 
-	int Random::Range(int rangeMin, int RangeMax)
-	{
-		std::uniform_int_distribution<> dist(rangeMin, RangeMax);
-		return dist(generator);
-	}
-
-	float Random::Range(float rangeMin, float RangeMax)
-	{
-		std::uniform_int_distribution<> dist(rangeMin, RangeMax);
-		return dist(generator);
-	}
 #pragma region Public Functions
 
 #pragma endregion Public Functions
@@ -113,6 +100,66 @@ namespace CS529
 	//--------------------------------------------------------------------------
 
 #pragma region Private Functions
+
+	void BehaviorAsteroid::Read(Stream& stream)
+	{
+		stream.PushNode("BehaviorAsteroid");
+
+		// Read the base Behavior variables.
+		// [HINT: Behavior::Read().]
+		Behavior::Read(stream);
+
+		// Read the derived class Behavior variables, if any.
+
+		stream.PopNode();
+	}
+
+	void BehaviorAsteroid::SetPosition()
+	{
+	}
+
+	void BehaviorAsteroid::SetVelocity()
+	{
+	}
+
+	void BehaviorAsteroid::onInit()
+	{
+		origin = static_cast<AsteroidOrigin>(Random::Range(0, 3));
+		SetPosition();
+		SetVelocity();
+		//switch (stateCurr)
+		//{
+		//case cIdle:
+		//	break;
+
+		//default:
+		//	break;
+		//}
+	}
+
+	void BehaviorAsteroid::onUpdate(float dt)
+	{
+		//switch (stateCurr)
+		//{
+		//case cIdle:
+		//	break;
+
+		//default:
+		//	break;
+		//}
+	}
+
+	void BehaviorAsteroid::onExit()
+	{
+		//switch (stateCurr)
+		//{
+		//case cIdle:
+		//	break;
+
+		//default:
+		//	break;
+		//}
+	}
 
 #pragma endregion Private Functions
 

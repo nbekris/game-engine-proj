@@ -26,6 +26,7 @@
 #include "BehaviorSpaceship.h"
 #include "BehaviorBullet.h"
 #include "BehaviorTeleporter.h"
+#include "BehaviorAsteroid.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -80,6 +81,7 @@ namespace CS529
 		Register("BehaviorSpaceship", []() -> Object* { return new BehaviorSpaceship(); });
 		Register("BehaviorBullet", []() -> Object* { return new BehaviorBullet(); });
 		Register("BehaviorTeleporter", []() -> Object* { return new BehaviorTeleporter(); });
+		Register("BehaviorAsteroid", []() -> Object* { return new BehaviorAsteroid(); });
 	}
 
 	//--------------------------------------------------------------------------
