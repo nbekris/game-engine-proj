@@ -16,6 +16,8 @@
 
 #include "Precompiled.h"
 #include "SpriteSourceLibrary.h"
+#include "Stream.h"
+#include "SpriteSource.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -50,7 +52,7 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Private Static Variables:
 	//--------------------------------------------------------------------------
-
+	std::unordered_map<std::string, const SpriteSource*> SpriteSourceLibrary::spriteSources;
 	//--------------------------------------------------------------------------
 	// Private Variables:
 	//--------------------------------------------------------------------------
@@ -69,6 +71,7 @@ namespace CS529
 
 	SpriteSourceLibrary::~SpriteSourceLibrary(void)
 	{
+		DeleteAll();
 	}
 
 #pragma endregion Constructors
@@ -76,6 +79,15 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Public Static Functions:
 	//--------------------------------------------------------------------------
+	void SpriteSourceLibrary::DeleteAll()
+	{
+		for (auto& pair : spriteSources)
+		{
+			delete pair.second;
+			pair.second = nullptr;
+		}
+		spriteSources.clear();
+	}
 
 #pragma region Public Static Functions
 
@@ -84,6 +96,34 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Public Functions:
 	//--------------------------------------------------------------------------
+
+	const SpriteSource* SpriteSourceLibrary::Build(const std::string& spriteSourceName)
+	{
+		const SpriteSource* existingSpriteSource = Find(spriteSourceName);
+		if (existingSpriteSource)
+		{
+			return existingSpriteSource;
+		}
+
+		std::string filePath = "./Data/SpriteSources/" + spriteSourceName + ".json";
+		Stream stream(filePath);
+		if (stream.IsValid() && stream.Contains("SpriteSource"))
+		{
+			SpriteSource* spriteSource = new SpriteSource();
+			spriteSource->Read(stream);
+			spriteSources.insert({ spriteSourceName, spriteSource });
+
+			return spriteSource;
+		}
+
+		return nullptr;
+	}
+
+	const SpriteSource* SpriteSourceLibrary::Find(const std::string spriteSourceName)
+	{
+		if (auto search = spriteSources.find(spriteSourceName); search != spriteSources.end()) return search->second;
+		return nullptr;
+	}
 
 #pragma region Public Functions
 

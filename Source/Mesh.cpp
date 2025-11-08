@@ -129,6 +129,7 @@ namespace CS529
 			&Vertex_Pos_Trc, &DGL_Color_Black, &adjustedUV_Trc);
 
 		meshResource = DGL_Graphics_EndMesh();
+		//this->drawMode = DGL_DM_TRIANGLELIST();
 
 		assert(meshResource && "Failed to create mesh!");
 
@@ -146,12 +147,6 @@ namespace CS529
 		meshResource = DGL_Graphics_EndMesh();
 
 		assert(meshResource && "Failed to create mesh!");
-	}
-
-	void Mesh::BuildAsteroid()
-	{
-		//DGL_Graphics_StartMesh();
-		// TODO READ MESH
 	}
 
 	void Mesh::Render() const
@@ -197,11 +192,11 @@ namespace CS529
 				unsigned int numRows;
 				stream.Read("NumCols", numCols);
 				stream.Read("NumRows", numRows);
-				// BuildQuad();
+				BuildQuad(1.0f / numCols, 1.0f / numRows, "name");
 			}
 			else
 			{
-				//log error message
+				LoggingSystem::Warning("No Mesh found in json.");
 			}
 			stream.PopNode();
 		}

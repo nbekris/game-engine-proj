@@ -25,7 +25,7 @@
 #include "Physics.h"
 #include "Transform.h"
 #include "EntityFactory.h"
-
+#include "ColliderCircle.h"
 #include <numbers>
 
 //------------------------------------------------------------------------------
@@ -60,8 +60,9 @@ namespace CS529
 	static const float spaceshipAcceleration = 150.0f;
 	static const float spaceshipSpeedMax = 500.0f;
 	static const float spaceshipTurnRateMax = (float)std::numbers::pi / 1.5f;
-	static const float spaceshipWeaponCooldownTime = 0.034f;
+	static const float spaceshipWeaponCooldownTime = 0.25f;
 	static const float spaceshipWeaponBulletSpeed = 750.0f;
+	static const float spaceshipDeathDuration = 3.0f;
 	//--------------------------------------------------------------------------
 	// Private Static Variables:
 	//--------------------------------------------------------------------------
@@ -127,11 +128,28 @@ namespace CS529
 
 	void BehaviorSpaceship::onInit()
 	{
+		ColliderCircle* colliderCircle = Parent()->Get<ColliderCircle>();
+		Transform* transform = Parent()->Get<Transform>();
+		Physics* physics = Parent()->Get<Physics>();
+
 		switch (stateCurr)
 		{
 		case cSpaceshipIdle:
+			if (colliderCircle)
+			{
+				colliderCircle->RegisterHandler(CollisionHandler);
+			}
 			break;
+		case (cSpaceshipDead):
+			timer = spaceshipDeathDuration;
 
+			if (physics)
+			{
+				physics->Velocity({ 0.0, 0.0 });
+				physics->RotationalVelocity(0.0f);
+			}
+
+			break;
 		default:
 			break;
 		}
@@ -157,6 +175,9 @@ namespace CS529
 			{
 				stateNext = cSpaceshipIdle;
 			}
+			break;
+		case cSpaceshipDead:
+			PlayDeathAnim(dt);
 			break;
 		default:
 			break;
@@ -260,6 +281,48 @@ namespace CS529
 				bulletPhysics->Velocity(bulletVelocity);
 			}
 			SceneSystem::AddEntity(bullet);
+		}
+	}
+
+	void BehaviorSpaceship::PlayDeathAnim(float dt)
+	{
+		Transform* transform = Parent()->Get<Transform>();
+		Physics* physics = Parent()->Get<Physics>();
+
+		if (transform && physics)
+		{
+			Vector2D velocity = physics->Velocity();
+			Vector2D scale = transform->Scale();
+
+			float rotation = transform->Rotation();
+			rotation += (float)std::numbers::pi * dt;
+			transform->Rotation(rotation);
+
+			float newScalex = scale.x - 25.0f * dt;
+			float newScaley = scale.y - 10.0f * dt;
+
+			if (newScalex < 0.0f) newScalex = 0.0f;
+			if (newScaley < 0.0f) newScaley = 0.0f;
+
+			transform->Scale(Vector2D(newScalex, newScaley));
+		}
+
+		timer -= dt;
+		if (timer <= 0.0f)
+		{
+			SceneSystem::Restart();
+		}
+	}
+
+	void BehaviorSpaceship::CollisionHandler(Entity* entityA, const Entity* entityB)
+	{
+		if (entityA && entityB)
+		{
+			if (entityB->IsNamed("Asteroid"))
+			{
+				BehaviorSpaceship* spaceship = entityA->Get<BehaviorSpaceship>();
+				spaceship->stateNext = cSpaceshipDead;
+			}
 		}
 	}
 

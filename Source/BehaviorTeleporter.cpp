@@ -171,25 +171,24 @@ namespace CS529
 		// Check if entity has reached screen boundaries, top, left, bottom, right
 		if (pos.x < -wHalfSize.x)
 		{
-			Teleport(pos, transform);
+			Teleport({wHalfSize.x, pos.y}, transform);
 		}
 		else if (pos.x > wHalfSize.x)
 		{
-			Teleport(pos, transform);
+			Teleport({ -wHalfSize.x, pos.y }, transform);
 		}
 		else if (pos.y < -wHalfSize.y) 
 		{
-			Teleport(pos, transform);
+			Teleport({ pos.x, wHalfSize.y }, transform);
 		}
 		else if (pos.y > wHalfSize.y)
 		{
-			Teleport(pos, transform);
+			Teleport({ pos.x, -wHalfSize.y }, transform);
 		}
 	}
 
 	void BehaviorTeleporter::Teleport(Vector2D pos, Transform* transform)
 	{
-		pos.Scale(-1);
 		transform->Translation(pos);
 	}
 

@@ -24,6 +24,8 @@
 #include "Random.h"
 #include "Transform.h"
 #include "Physics.h"
+#include "ColliderCircle.h"
+#include "ScoreSystem.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -72,10 +74,14 @@ namespace CS529
 	BehaviorAsteroid::BehaviorAsteroid(void)
 		: Behavior()
 	{
+		origin = cAsteroidOriginTlc;
 	}
 
 	BehaviorAsteroid::BehaviorAsteroid(const BehaviorAsteroid* other)
-		: Behavior(other)
+		: Behavior(other),
+		  origin(other ? other->origin : cAsteroidOriginTlc),
+		  asteroidSpeedMin(other ? other->asteroidSpeedMin : 50.0f),
+		  asteroidSpeedMax(other ? other->asteroidSpeedMax : 100.0f)
 	{
 	}
 
@@ -146,16 +152,16 @@ namespace CS529
 		switch (origin)
 		{
 		case cAsteroidOriginTrc:
-			angle = Random::Range(-80, -10);
+			angle = Random::Range(-80.0f, -10.0f);
 			break;
 		case cAsteroidOriginBlc:
-			angle = Random::Range(-170, -100);
+			angle = Random::Range(-170.0f, -100.0f);
 			break;
 		case cAsteroidOriginBrc:
-			angle = Random::Range(10, 80);
+			angle = Random::Range(10.0f, 80.0f);
 			break;
 		case cAsteroidOriginTlc:
-			angle = Random::Range(100, 170);
+			angle = Random::Range(100.0f, 170.0f);
 			break;
 		}
 		Vector2D dirVec;
@@ -172,30 +178,32 @@ namespace CS529
 		origin = static_cast<AsteroidOrigin>(Random::Range(0, 3));
 		SetPosition();
 		SetVelocity();
+
+		ColliderCircle* colliderCircle = Parent()->Get<ColliderCircle>();
+		if (colliderCircle)
+		{
+			colliderCircle->RegisterHandler(CollisionHandler);
+		}
 	}
 
 	void BehaviorAsteroid::onUpdate(float dt)
 	{
-		//switch (stateCurr)
-		//{
-		//case cIdle:
-		//	break;
-
-		//default:
-		//	break;
-		//}
 	}
 
 	void BehaviorAsteroid::onExit()
 	{
-		//switch (stateCurr)
-		//{
-		//case cIdle:
-		//	break;
+	}
 
-		//default:
-		//	break;
-		//}
+	void BehaviorAsteroid::CollisionHandler(Entity* entityA, const Entity* entityB)
+	{
+		if (entityA && entityB)
+		{
+			if (entityB->IsNamed("Bullet") || entityB->IsNamed("Spaceship"))
+			{
+				ScoreSystem::Instance().IncreaseScore(asteroidScore);
+				entityA->Destroy();
+			}
+		}
 	}
 
 #pragma endregion Private Functions

@@ -71,8 +71,6 @@ namespace CS529
 		// @brief [HINT: Refer to the "Spaceship" mesh in DemoScene for specific information.]
 		void BuildSpaceship();
 
-		void BuildAsteroid();
-
 		// @brief Render the Mesh.
 		// @brief [NOTE: This function is just one step in a multi-step rendering process.]
 		// @brief [HINT: This is a one-line function.]

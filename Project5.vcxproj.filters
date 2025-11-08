@@ -232,6 +232,15 @@
     <ClCompile Include="Source\BehaviorAsteroid.cpp">
       <Filter>Source Files\Game\Behaviors</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ColliderCircle.cpp">
+      <Filter>Source Files\Engine\Entities\Components\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collider.cpp">
+      <Filter>Source Files\Engine\Entities\Components\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BehaviorHudText.cpp">
+      <Filter>Source Files\Game\Behaviors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Precompiled.h">
@@ -382,6 +391,15 @@
       <Filter>Source Files\Engine\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Source\BehaviorAsteroid.h">
+      <Filter>Source Files\Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ColliderCircle.h">
+      <Filter>Source Files\Engine\Entities\Components\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collider.h">
+      <Filter>Source Files\Engine\Entities\Components\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BehaviorHudText.h">
       <Filter>Source Files\Game\Behaviors</Filter>
     </ClInclude>
   </ItemGroup>

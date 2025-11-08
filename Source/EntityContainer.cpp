@@ -17,6 +17,8 @@
 #include "Precompiled.h"
 #include "EntityContainer.h"
 #include "Entity.h"
+#include "Collider.h"
+#include "ColliderCircle.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -120,6 +122,7 @@ namespace CS529
 	{
 		for (Entity* entity : entities)
 		{
+			std::string_view name = findName;
 			if (entity->IsNamed(findName))
 			{
 				return entity;
@@ -130,6 +133,21 @@ namespace CS529
 
 	void EntityContainer::CheckCollisions() const
 	{
+		for (int i = 0; i < entities.size(); ++i)
+		{
+			Collider* colliderA = entities[i]->Get<ColliderCircle>();
+			if (colliderA)
+			{
+				for (int j = i + 1; j < entities.size(); ++j)
+				{
+					Collider* colliderB = entities[j]->Get<ColliderCircle>();
+					if (colliderB)
+					{
+						colliderA->CheckCollision(colliderB);
+					}
+				}
+			}
+		}
 	}
 
 	void EntityContainer::DeleteAll()

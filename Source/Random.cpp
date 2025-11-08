@@ -90,19 +90,19 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	void Random::Initialize()
 	{
-		std::mt19937 generator(time(nullptr));
+		generator.seed(static_cast<unsigned int>(time(nullptr)));
 	}
 
 	int Random::Range(int rangeMin, int RangeMax)
 	{
-		std::uniform_int_distribution<> dist(rangeMin, RangeMax);
-		return dist(generator);
+		std::uniform_real_distribution<> dist(rangeMin, RangeMax);
+		return (int)dist(generator);
 	}
 
 	float Random::Range(float rangeMin, float RangeMax)
 	{
-		std::uniform_int_distribution<> dist(rangeMin, RangeMax);
-		return dist(generator);
+		std::uniform_real_distribution<> dist(rangeMin, RangeMax);
+		return (float)dist(generator);
 	}
 #pragma region Public Functions
 

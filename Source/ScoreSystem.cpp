@@ -34,7 +34,7 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Public Static Variables:
 	//--------------------------------------------------------------------------
-
+	ScoreSystem* ScoreSystem::instance = nullptr;
 	//--------------------------------------------------------------------------
 	// Public Variables:
 	//--------------------------------------------------------------------------
@@ -63,8 +63,15 @@ namespace CS529
 
 	//--------------------------------------------------------------------------
 
+	ScoreSystem::ScoreSystem(void)
+		: System("ScoreSystem")
+	{
+		instance = this;
+	}
+
 	ScoreSystem::~ScoreSystem(void)
 	{
+		instance = nullptr;
 	}
 
 #pragma endregion Constructors
@@ -80,6 +87,48 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Public Functions:
 	//--------------------------------------------------------------------------
+
+	void ScoreSystem::NewGame()
+	{
+		score = 0;
+		highScore = 0;
+		waveCount = 0;
+	}
+
+	void ScoreSystem::Reset()
+	{
+		highScore = std::max(score, highScore);
+		score = 0;
+		waveCount = 0;
+	}
+
+	unsigned ScoreSystem::GetValue(ScoreSystemId id) const
+	{
+		switch (id) 
+		{
+			case (SsiScore):
+				return score;
+				break;
+			case (SsiHighScore):
+				return highScore;
+				break;
+			case (SsiWaveCount):
+				return waveCount;
+				break;
+		}
+
+		return 0;
+	}
+
+	void ScoreSystem::IncreaseScore(unsigned amount)
+	{
+ 		score += amount;
+	}
+
+	void ScoreSystem::IncreaseWave(void)
+	{
+		++waveCount;
+	}
 
 #pragma region Public Functions
 

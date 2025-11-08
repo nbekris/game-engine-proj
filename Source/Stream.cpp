@@ -144,21 +144,6 @@ namespace CS529
 
 #pragma endregion Public Functions
 
-	//void Stream::GetKeys()
-	//{
-	//	// Get keys inside Entity
-	//	for (auto& [key, value] : jsonData["Entity"].items())
-	//	{
-	//		std::cout << key << "\n";
-	//	}
-
-	//	// Get keys inside Components
-	//	for (auto& [key, value] : jsonData["Entity"]["Components"].items())
-	//	{
-	//		std::cout << "Component: " << key << "\n";
-	//	}
-	//}
-
 	//--------------------------------------------------------------------------
 	// Private Functions:
 	//--------------------------------------------------------------------------

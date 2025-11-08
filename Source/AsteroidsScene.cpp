@@ -27,6 +27,8 @@
 #include "Entity.h"
 #include "Transform.h"
 #include "Sprite.h"
+#include "ScoreSystem.h"
+#include "SpriteSourceLibrary.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -75,6 +77,7 @@ namespace CS529
 	AsteroidsScene::AsteroidsScene()
 		: Scene("AsteroidsScene")
 	{
+		asteroidSpawnCount = asteroidSpawnInitial;
 	}
 
 #pragma endregion Constructors
@@ -103,7 +106,7 @@ namespace CS529
 
 	void AsteroidsScene::Load()
 	{
-		asteroidSpawnCount = asteroidSpawnInitial;
+		ScoreSystem::Instance().NewGame();
 	}
 
 	bool AsteroidsScene::Initialize()
@@ -111,12 +114,23 @@ namespace CS529
 		Entity* entity = EntityFactory::Build("Spaceship");
 		if (entity)
 		{
-			AddEntity(entity);
+			this->AddEntity(entity);
 			entity->Get<Transform>()->Translation({ 0.0f, 0.0f }); // set spaceship to start position
 		}
 
 		DGL_Graphics_SetBackgroundColor(&DGL_Color_Black);
 		DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
+
+		Entity* scoreEntity = EntityFactory::Build("AsteroidsScore");
+		Entity* highScoreEntity = EntityFactory::Build("AsteroidsHighScore");
+		Entity* asteroidsWaveEntity = EntityFactory::Build("AsteroidsWaveCount");
+
+		this->AddEntity(scoreEntity);
+		this->AddEntity(highScoreEntity);
+		this->AddEntity(asteroidsWaveEntity);
+
+		ScoreSystem::Instance().Reset();
+		asteroidSpawnCount = asteroidSpawnInitial;
 
 		return true;
 	}
@@ -152,21 +166,24 @@ namespace CS529
 	void AsteroidsScene::Unload()
 	{
 		MeshLibrary::DeleteAll();
+		SpriteSourceLibrary::DeleteAll();
 	}
 
 	void AsteroidsScene::SpawnWave()
 	{
-		while (asteroidSpawnCount < asteroidSpawnMaximum) // this probably needs to be changed
+		ScoreSystem::Instance().IncreaseWave();
+		for (unsigned int i = 0; i < asteroidSpawnCount; ++i) 
 		{
 			SpawnAsteroid();
-			++asteroidSpawnCount;
 		}
+
+		asteroidSpawnCount = asteroidSpawnCount != asteroidSpawnMaximum ? ++asteroidSpawnCount : asteroidSpawnMaximum;
 	}
 
 	void AsteroidsScene::SpawnAsteroid()
 	{
 		Entity* entity = EntityFactory::Build("Asteroid");
-		if (entity) //should add spawn entity function
+		if (entity)
 		{
 			AddEntity(entity);
 			entity->Get<Transform>()->Translation({ 0.0f, 0.0f });

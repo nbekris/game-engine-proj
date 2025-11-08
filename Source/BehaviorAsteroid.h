@@ -74,6 +74,8 @@ namespace CS529
 		void onUpdate(float dt) override;
 		void onExit() override;
 
+		static void CollisionHandler(Entity* entityA, const Entity*entityB);
+
 		// Private Constants:
 	private:
 		typedef enum
@@ -88,7 +90,7 @@ namespace CS529
 
 		// Private Static Variables:
 	private:
-
+		static const unsigned asteroidScore = 20;
 		// Private Variables:
 	private:
 		AsteroidOrigin origin;
