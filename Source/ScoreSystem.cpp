@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	SpriteSource.cpp
+// File Name:	ScoreSystem.cpp
 // Author(s):	bekri
 // Course:		CS529F25
 // Project:		Project 1
@@ -15,9 +15,7 @@
 //------------------------------------------------------------------------------
 
 #include "Precompiled.h"
-#include "SpriteSource.h"
-#include "Vector2D.h"
-#include "Stream.h"
+#include "ScoreSystem.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -36,7 +34,7 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Public Static Variables:
 	//--------------------------------------------------------------------------
-
+	ScoreSystem* ScoreSystem::instance = nullptr;
 	//--------------------------------------------------------------------------
 	// Public Variables:
 	//--------------------------------------------------------------------------
@@ -63,18 +61,17 @@ namespace CS529
 
 #pragma region Constructors
 
-	SpriteSource::SpriteSource(void)
-	{
-	}
-
 	//--------------------------------------------------------------------------
 
-	SpriteSource::~SpriteSource(void)
+	ScoreSystem::ScoreSystem(void)
+		: System("ScoreSystem")
 	{
-		if (textureResource)
-		{
-			DGL_Graphics_FreeTexture(const_cast<DGL_Texture**>(&textureResource));
-		}
+		instance = this;
+	}
+
+	ScoreSystem::~ScoreSystem(void)
+	{
+		instance = nullptr;
 	}
 
 #pragma endregion Constructors
@@ -90,76 +87,49 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Public Functions:
 	//--------------------------------------------------------------------------
-	void SpriteSource::LoadTexture(unsigned numCols, unsigned numRows, std::string_view textureName)
-	{
-		this->numCols = numCols;
-		this->numRows = numRows;
 
-		textureResource = DGL_Graphics_LoadTexture(textureName.data());
+	void ScoreSystem::NewGame()
+	{
+		score = 0;
+		highScore = 0;
+		waveCount = 0;
 	}
 
-	unsigned SpriteSource::GetFrameCount() const
+	void ScoreSystem::Reset()
 	{
-		return numCols * numRows;
+		highScore = std::max(score, highScore);
+		score = 0;
+		waveCount = 0;
 	}
 
-	void SpriteSource::UseTexture() const
+	unsigned ScoreSystem::GetValue(ScoreSystemId id) const
 	{
-		if (textureResource)
+		switch (id) 
 		{
-			DGL_Graphics_SetTexture(textureResource);
+			case (SsiScore):
+				return score;
+				break;
+			case (SsiHighScore):
+				return highScore;
+				break;
+			case (SsiWaveCount):
+				return waveCount;
+				break;
 		}
+
+		return 0;
 	}
 
-	// @brief Calculates the UV offset for the specified frame.
-	// @brief [HINT: Refer to the "Sprite Sources" slide deck for implementation details.]
-	//
-	// @param frameIndex = The index of the frame within a spritesheet to be displayed.
-	// @param uv = A structure to be filled with the calculated UV values.
-	void SpriteSource::CalculateTextureOffset(unsigned frameIndex, Vector2D& uv) const
+	void ScoreSystem::IncreaseScore(unsigned amount)
 	{
-		float uSize = 1.0f / numCols;
-		float vSize = 1.0f / numRows;
-
-		float uOffset = uSize * (frameIndex % numCols);
-		float vOffset = vSize * (frameIndex / numCols);
-
-		uv.Set(uOffset, vOffset);
+ 		score += amount;
 	}
 
-	// @brief Calculates the UV offset for the specified frame and passes it to the DGL.
-	// @brief Specific Steps:
-	// @brief   Create a Vector2D variable called 'uv'.
-	// @brief   Call CalculateTextureOffset
-	// @brief   Call DGL_Graphics_SetCB_TextureOffset
-	//
-	// @param frameIndex = The index of the frame within a spritesheet to be displayed.
-	void SpriteSource::SetTextureOffset(unsigned frameIndex) const
+	void ScoreSystem::IncreaseWave(void)
 	{
-		Vector2D uv;
-		CalculateTextureOffset(frameIndex, uv);
-		DGL_Graphics_SetCB_TextureOffset(&uv);
+		++waveCount;
 	}
 
-	void SpriteSource::Read(Stream& stream)
-	{
-		if (stream.IsValid())
-		{
-			stream.PushNode("SpriteSource");
-			stream.Read("NumCols", numCols);
-			stream.Read("NumRows", numRows);
-
-			std::string textureName;
-			stream.Read("Texture", textureName);
-			if (textureName != "")
-			{
-				std::string filePath;
-				filePath.append("Assets/").append(textureName);
-				LoadTexture(numCols, numRows, filePath);
-			}
-			stream.PopNode();
-		}
-	}
 #pragma region Public Functions
 
 #pragma endregion Public Functions

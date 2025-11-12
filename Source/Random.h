@@ -41,6 +41,7 @@ namespace CS529
 		// Constructors/Destructors:
 	public:
 		Random(void);
+		~Random(void);
 
 		// Public Static Functions:
 	public:

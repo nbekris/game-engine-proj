@@ -1,10 +1,11 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	SpriteSource.cpp
+// File Name:	BehaviorTeleporter.cpp
 // Author(s):	bekri
 // Course:		CS529F25
-// Project:		Project 1
-// Purpose:		Template for a new .cpp file.
+// Project:		Project 4
+// Purpose:		This derived class is responsible for the behavior associated
+//   with a "template" entity.
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
 //
@@ -15,9 +16,15 @@
 //------------------------------------------------------------------------------
 
 #include "Precompiled.h"
-#include "SpriteSource.h"
-#include "Vector2D.h"
+
+#include "Entity.h"
+#include "Behavior.h"
+#include "BehaviorTeleporter.h"
 #include "Stream.h"
+#include "Vector2D.h"
+#include "Transform.h"
+#include "Physics.h"
+#include <iostream>
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -63,18 +70,14 @@ namespace CS529
 
 #pragma region Constructors
 
-	SpriteSource::SpriteSource(void)
+	BehaviorTeleporter::BehaviorTeleporter(void)
+		: Behavior()
 	{
 	}
 
-	//--------------------------------------------------------------------------
-
-	SpriteSource::~SpriteSource(void)
+	BehaviorTeleporter::BehaviorTeleporter(const BehaviorTeleporter* other)
+		: Behavior(other)
 	{
-		if (textureResource)
-		{
-			DGL_Graphics_FreeTexture(const_cast<DGL_Texture**>(&textureResource));
-		}
 	}
 
 #pragma endregion Constructors
@@ -90,76 +93,7 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Public Functions:
 	//--------------------------------------------------------------------------
-	void SpriteSource::LoadTexture(unsigned numCols, unsigned numRows, std::string_view textureName)
-	{
-		this->numCols = numCols;
-		this->numRows = numRows;
 
-		textureResource = DGL_Graphics_LoadTexture(textureName.data());
-	}
-
-	unsigned SpriteSource::GetFrameCount() const
-	{
-		return numCols * numRows;
-	}
-
-	void SpriteSource::UseTexture() const
-	{
-		if (textureResource)
-		{
-			DGL_Graphics_SetTexture(textureResource);
-		}
-	}
-
-	// @brief Calculates the UV offset for the specified frame.
-	// @brief [HINT: Refer to the "Sprite Sources" slide deck for implementation details.]
-	//
-	// @param frameIndex = The index of the frame within a spritesheet to be displayed.
-	// @param uv = A structure to be filled with the calculated UV values.
-	void SpriteSource::CalculateTextureOffset(unsigned frameIndex, Vector2D& uv) const
-	{
-		float uSize = 1.0f / numCols;
-		float vSize = 1.0f / numRows;
-
-		float uOffset = uSize * (frameIndex % numCols);
-		float vOffset = vSize * (frameIndex / numCols);
-
-		uv.Set(uOffset, vOffset);
-	}
-
-	// @brief Calculates the UV offset for the specified frame and passes it to the DGL.
-	// @brief Specific Steps:
-	// @brief   Create a Vector2D variable called 'uv'.
-	// @brief   Call CalculateTextureOffset
-	// @brief   Call DGL_Graphics_SetCB_TextureOffset
-	//
-	// @param frameIndex = The index of the frame within a spritesheet to be displayed.
-	void SpriteSource::SetTextureOffset(unsigned frameIndex) const
-	{
-		Vector2D uv;
-		CalculateTextureOffset(frameIndex, uv);
-		DGL_Graphics_SetCB_TextureOffset(&uv);
-	}
-
-	void SpriteSource::Read(Stream& stream)
-	{
-		if (stream.IsValid())
-		{
-			stream.PushNode("SpriteSource");
-			stream.Read("NumCols", numCols);
-			stream.Read("NumRows", numRows);
-
-			std::string textureName;
-			stream.Read("Texture", textureName);
-			if (textureName != "")
-			{
-				std::string filePath;
-				filePath.append("Assets/").append(textureName);
-				LoadTexture(numCols, numRows, filePath);
-			}
-			stream.PopNode();
-		}
-	}
 #pragma region Public Functions
 
 #pragma endregion Public Functions
@@ -169,6 +103,94 @@ namespace CS529
 	//--------------------------------------------------------------------------
 
 #pragma region Private Functions
+
+	void BehaviorTeleporter::Read(Stream& stream)
+	{
+		stream.PushNode("BehaviorTeleporter");
+
+		// Read the base Behavior variables.
+		// [HINT: Behavior::Read().]
+		Behavior::Read(stream);
+
+		// Read the derived class Behavior variables, if any.
+
+		stream.PopNode();
+	}
+
+	void BehaviorTeleporter::onInit()
+	{
+		switch (stateCurr)
+		{
+		case cIdle:
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	void BehaviorTeleporter::onUpdate(float dt)
+	{
+		switch (stateCurr)
+		{
+		case cIdle:
+			break;
+
+		default:
+			break;
+		}
+
+		CheckPosition();
+	}
+
+	void BehaviorTeleporter::onExit()
+	{
+		switch (stateCurr)
+		{
+		case cIdle:
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	void BehaviorTeleporter::CheckPosition()
+	{
+		// Get dimensions of window, then scale to get window half size to test against
+		DGL_Vec2 windowSize = DGL_Window_GetSize();
+		Vector2D wHalfSize(windowSize.x, windowSize.y);
+		wHalfSize.Scale(0.5f);
+
+		Transform* transform = Parent()->Get<Transform>();
+		Physics* physics = Parent()->Get<Physics>();
+
+		Vector2D velocity(physics->Velocity());
+		Vector2D pos(transform->Translation());
+
+		// Check if entity has reached screen boundaries, top, left, bottom, right
+		if (pos.x < -wHalfSize.x)
+		{
+			Teleport({wHalfSize.x, pos.y}, transform);
+		}
+		else if (pos.x > wHalfSize.x)
+		{
+			Teleport({ -wHalfSize.x, pos.y }, transform);
+		}
+		else if (pos.y < -wHalfSize.y) 
+		{
+			Teleport({ pos.x, wHalfSize.y }, transform);
+		}
+		else if (pos.y > wHalfSize.y)
+		{
+			Teleport({ pos.x, -wHalfSize.y }, transform);
+		}
+	}
+
+	void BehaviorTeleporter::Teleport(Vector2D pos, Transform* transform)
+	{
+		transform->Translation(pos);
+	}
 
 #pragma endregion Private Functions
 

@@ -23,6 +23,7 @@
 #include "LoggingSystem.h"
 #include "Object.h"
 #include "System.h"
+#include "Random.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -110,6 +111,8 @@ namespace CS529
 	bool Engine::Initialize()
 	{
 		LoggingSystem::Verbose("Engine: Initialize");
+
+		Random::Initialize();
 
 		bool success = true;
 		for (auto system : systems)

@@ -67,12 +67,12 @@ namespace CS529
 
 		// The following color values are OPTIONAL.
 		// [NOTE: You are permitted to add these or other color values.]
-		//static const Color Red;
-		//static const Color Green;
-		//static const Color Blue;
-		//static const Color Cyan;
-		//static const Color Yellow;
-		//static const Color Magenta;
+		static const Color Red;
+		static const Color Green;
+		static const Color Blue;
+		static const Color Cyan;
+		static const Color Yellow;
+		static const Color Magenta;
 
 		// Private Constants:
 	private:
@@ -82,6 +82,10 @@ namespace CS529
 
 		// Private Variables:
 	private:
+		float r;
+		float g;
+		float b;
+		float a;
 	};
 
 }	// namespace

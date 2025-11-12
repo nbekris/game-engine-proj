@@ -86,6 +86,10 @@ namespace CS529
 
 		void SpawnBullet() const;
 
+		void PlayDeathAnim(float dt);
+
+		static void CollisionHandler(Entity* entityA, const Entity* entityB);
+
 		// Private Constants:
 	private:
 		typedef enum

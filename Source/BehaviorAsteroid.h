@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	BehaviorBullet.h
-// Author(s):	dschilling
+// File Name:	BehaviorAsteroid.h
+// Author(s):	bekri
 // Course:		CS529F25
 // Project:		Project 4
 // Purpose:		This derived class is responsible for the behavior associated
@@ -35,57 +35,67 @@ namespace CS529
 	// Typedefs:
 
 	// Class Definition:
-	class BehaviorBullet : public Behavior
+	class BehaviorAsteroid : public Behavior
 	{
 		// Public Constants and Enums:
 	public:
 
 		// Constructors/Destructors:
 	public:
-		BehaviorBullet(void);
+		BehaviorAsteroid(void);
 
 		// @brief This copy-constructor should perform a shallow copy of the data.
-		BehaviorBullet(const BehaviorBullet* other);
+		BehaviorAsteroid(const BehaviorAsteroid* other);
 
 		// Public Static Functions:
 	public:
 
 		// Public Functions:
 	public:
-		// @brief Read the properties of a BehaviorBullet component from a stream.
+		// @brief Read the properties of a BehaviorAsteroid component from a stream.
 		// @brief [NOTE: The base Behavior variables must be read using Behavior::Read().]
 		//
 		// @param stream = The data stream used for reading.
 		void Read(Stream& stream);
 
+		void SetPosition();
+		void SetVelocity();
+
 		// Public Event Handlers
 	public:
 
 		// Private Functions:
-		static void CollisionHandler(Entity* entityA, const Entity* entityB);
 	private:
 		// @brief This function is required to invoke the copy-constructor in derived classes.
-		BehaviorBullet* Clone() const override { return new BehaviorBullet(this); }
+		BehaviorAsteroid* Clone() const override { return new BehaviorAsteroid(this); }
 
 		// Behavior Finite-State Machine (FSM) functions.
 		void onInit() override;
 		void onUpdate(float dt) override;
 		void onExit() override;
 
+		static void CollisionHandler(Entity* entityA, const Entity*entityB);
+
 		// Private Constants:
 	private:
 		typedef enum
 		{
-			cInvalid = -1,	// Default state for the behavior FSM.
-			cIdle,			// Starting state for the behavior FSM.
+			cAsteroidOriginTlc,
+			cAsteroidOriginTrc,
+			cAsteroidOriginBlc,
+			cAsteroidOriginBrc,
+			cAsteroidOriginCount
 
-		} States;
+		} AsteroidOrigin;
 
 		// Private Static Variables:
 	private:
-
+		static const unsigned asteroidScore = 20;
 		// Private Variables:
 	private:
+		AsteroidOrigin origin;
+		const float asteroidSpeedMin = 50.0f;
+		const float asteroidSpeedMax = 100.0f;
 	};
 
 }	// namespace

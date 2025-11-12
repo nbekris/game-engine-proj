@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	BehaviorBullet.h
-// Author(s):	dschilling
+// File Name:	BehaviorTeleporter.h
+// Author(s):	bekri
 // Course:		CS529F25
 // Project:		Project 4
 // Purpose:		This derived class is responsible for the behavior associated
@@ -18,6 +18,8 @@
 //------------------------------------------------------------------------------
 
 #include "Behavior.h"
+#include "Vector2D.h"
+#include "Transform.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -35,24 +37,24 @@ namespace CS529
 	// Typedefs:
 
 	// Class Definition:
-	class BehaviorBullet : public Behavior
+	class BehaviorTeleporter : public Behavior
 	{
 		// Public Constants and Enums:
 	public:
 
 		// Constructors/Destructors:
 	public:
-		BehaviorBullet(void);
+		BehaviorTeleporter(void);
 
 		// @brief This copy-constructor should perform a shallow copy of the data.
-		BehaviorBullet(const BehaviorBullet* other);
+		BehaviorTeleporter(const BehaviorTeleporter* other);
 
 		// Public Static Functions:
 	public:
 
 		// Public Functions:
 	public:
-		// @brief Read the properties of a BehaviorBullet component from a stream.
+		// @brief Read the properties of a BehaviorTeleporter component from a stream.
 		// @brief [NOTE: The base Behavior variables must be read using Behavior::Read().]
 		//
 		// @param stream = The data stream used for reading.
@@ -62,10 +64,11 @@ namespace CS529
 	public:
 
 		// Private Functions:
-		static void CollisionHandler(Entity* entityA, const Entity* entityB);
 	private:
 		// @brief This function is required to invoke the copy-constructor in derived classes.
-		BehaviorBullet* Clone() const override { return new BehaviorBullet(this); }
+		BehaviorTeleporter* Clone() const override { return new BehaviorTeleporter(this); }
+		void CheckPosition();
+		void Teleport(Vector2D pos, Transform* transform);
 
 		// Behavior Finite-State Machine (FSM) functions.
 		void onInit() override;

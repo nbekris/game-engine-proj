@@ -21,6 +21,7 @@
 #include "Behavior.h"
 #include "BehaviorBullet.h"
 #include "Stream.h"
+#include "ColliderCircle.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -115,6 +116,11 @@ namespace CS529
 
 	void BehaviorBullet::onInit()
 	{
+		ColliderCircle* colliderCircle = Parent()->Get<ColliderCircle>();
+		if (colliderCircle)
+		{
+			colliderCircle->RegisterHandler(CollisionHandler);
+		}
 		switch (stateCurr)
 		{
 		case cIdle:
@@ -151,6 +157,17 @@ namespace CS529
 
 		default:
 			break;
+		}
+	}
+
+	void BehaviorBullet::CollisionHandler(Entity* entityA, const Entity* entityB)
+	{
+		if (entityA && entityB)
+		{
+			if (entityB->IsNamed("Asteroid"))
+			{
+				entityA->Destroy();
+			}
 		}
 	}
 

@@ -1,10 +1,11 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	Stream.cpp
+// File Name:	BehaviorAsteroid.cpp
 // Author(s):	bekri
 // Course:		CS529F25
-// Project:		Project 1
-// Purpose:		Template for a new .cpp file.
+// Project:		Project 4
+// Purpose:		This derived class is responsible for the behavior associated
+//   with a "template" entity.
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
 //
@@ -15,9 +16,19 @@
 //------------------------------------------------------------------------------
 
 #include "Precompiled.h"
+
+#include "Entity.h"
+#include "Behavior.h"
+#include "BehaviorAsteroid.h"
 #include "Stream.h"
-#include <fstream>
-#include <iostream>
+#include "Random.h"
+#include "Transform.h"
+#include "Physics.h"
+#include "ColliderCircle.h"
+#include "ScoreSystem.h"
+
+#include "iostream"
+
 //------------------------------------------------------------------------------
 // External Declarations:
 //------------------------------------------------------------------------------
@@ -62,68 +73,18 @@ namespace CS529
 
 #pragma region Constructors
 
-	Stream::Stream(std::string_view filePath)
+	BehaviorAsteroid::BehaviorAsteroid(void)
+		: Behavior()
 	{
-		Open(filePath);
+		origin = cAsteroidOriginTlc;
 	}
 
-	//--------------------------------------------------------------------------
-
-	Stream::~Stream(void)
+	BehaviorAsteroid::BehaviorAsteroid(const BehaviorAsteroid* other)
+		: Behavior(other),
+		  origin(other ? other->origin : cAsteroidOriginTlc),
+		  asteroidSpeedMin(other ? other->asteroidSpeedMin : 50.0f),
+		  asteroidSpeedMax(other ? other->asteroidSpeedMax : 100.0f)
 	{
-	}
-
-	bool Stream::Contains(std::string_view key)
-	{
-		return dataNode->contains(key);
-	}
-
-	void Stream::ReadArray(std::string_view key, std::function<void()> lambda)
-	{
-		if (Contains(key))
-		{
-			PushNode(key);
-			for (auto& item : dataNode->items())
-			{
-				dataStack.push_back(dataNode);
-				dataNode = &item.value();
-				lambda();
-				PopNode();
-			}
-			PopNode();
-			
-		}
-	}
-
-	void Stream::ReadObject(std::string_view key, std::function<void(const std::string& key)> lambda)
-	{
-		if (Contains(key))
-		{
-			PushNode(key);
-			for (auto& [componentKey, componentValue] : dataNode->items())
-			{
-				lambda(componentKey);
-			}
-			PopNode();
-		}
-	}
-
-	void Stream::PushNode(std::string_view key)
-	{
-		if (Contains(key))
-		{
-			dataStack.push_back(dataNode);
-			dataNode = &dataNode->at(key);
-		}
-	}
-
-	void Stream::PopNode()
-	{
-		if (!dataStack.empty())
-		{
-			dataNode = dataStack.back();
-			dataStack.pop_back();
-		}
 	}
 
 #pragma endregion Constructors
@@ -147,37 +108,105 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Private Functions:
 	//--------------------------------------------------------------------------
-	bool Stream::Open(std::string_view filePath)
-	{
-		isValid = false;
 
-		// Open the JSON file.
-		std::ifstream file(filePath.data());
-		if (!file.is_open())
-		{
-			LoggingSystem::Error("Stream: Failed to open file {}", filePath);
-			return isValid;
-		}
-
-
-		try
-		{
-			file >> jsonData;
-		}
-		catch (const json::parse_error& exception)
-		{
-			LoggingSystem::Error("Stream: JSON parsing error reading {}: ", filePath, exception.what());
-			return isValid;
-		}
-
-		// Set the current data node to the root of the JSON data.
-		dataNode = &jsonData;
-
-		// The JSON file has been read and parsed successfully.
-		isValid = true;
-		return isValid;
-	}
 #pragma region Private Functions
+
+	void BehaviorAsteroid::Read(Stream& stream)
+	{
+		stream.PushNode("BehaviorAsteroid");
+
+		// Read the base Behavior variables.
+		// [HINT: Behavior::Read().]
+		Behavior::Read(stream);
+
+		// Read the derived class Behavior variables, if any.
+
+		stream.PopNode();
+	}
+
+	void BehaviorAsteroid::SetPosition()
+	{
+		Vector2D wSize(DGL_Window_GetSize());
+		wSize.Scale(0.5f);
+
+		Transform* transform = Parent()->Get<Transform>();
+		switch (origin)
+		{
+		case cAsteroidOriginTrc:
+			transform->Translation(wSize);
+			break;
+		case cAsteroidOriginBlc:
+			transform->Translation({ -wSize.x, -wSize.y });
+			break;
+		case cAsteroidOriginBrc:
+			transform->Translation({ wSize.x, -wSize.y });
+			break;
+		case cAsteroidOriginTlc:
+			transform->Translation({ -wSize.x, wSize.y });
+			break;
+		}
+	}
+
+	void BehaviorAsteroid::SetVelocity()
+	{
+		Physics* physics = Parent()->Get<Physics>();
+		float angle = 0;
+		switch (origin)
+		{
+		case cAsteroidOriginTlc:
+			angle = Random::Range(100.0f, 170.0f);
+			break;
+		case cAsteroidOriginTrc:
+			angle = Random::Range(-80.0f, -10.0f);
+			break;
+		case cAsteroidOriginBlc:
+			angle = Random::Range(-170.0f, -100.0f);
+			break;
+		case cAsteroidOriginBrc:
+			angle = Random::Range(10.0f, 80.0f);
+			break;
+		}
+		Vector2D dirVec;
+		float speed = Random::Range(asteroidSpeedMin, asteroidSpeedMax);
+
+		dirVec.FromAngleDeg(angle);
+		dirVec.Scale(speed);
+
+		physics->Velocity(dirVec);
+	}
+
+	void BehaviorAsteroid::onInit()
+	{
+		origin = static_cast<AsteroidOrigin>(Random::Range(0, 3));
+		SetPosition();
+		SetVelocity();
+
+		ColliderCircle* colliderCircle = Parent()->Get<ColliderCircle>();
+		if (colliderCircle)
+		{
+			colliderCircle->RegisterHandler(CollisionHandler);
+		}
+	}
+
+	void BehaviorAsteroid::onUpdate(float dt)
+	{
+	}
+
+	void BehaviorAsteroid::onExit()
+	{
+	}
+
+	void BehaviorAsteroid::CollisionHandler(Entity* entityA, const Entity* entityB)
+	{
+		if (entityA && entityB)
+		{
+			if (entityB->IsNamed("Bullet") || entityB->IsNamed("Spaceship"))
+			{
+				ScoreSystem::Instance().IncreaseScore(asteroidScore);
+				entityA->Destroy();
+			}
+		}
+	}
 
 #pragma endregion Private Functions
 

@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	SpriteSource.cpp
+// File Name:	SpriteSourceLibrary.cpp
 // Author(s):	bekri
 // Course:		CS529F25
 // Project:		Project 1
@@ -15,9 +15,9 @@
 //------------------------------------------------------------------------------
 
 #include "Precompiled.h"
-#include "SpriteSource.h"
-#include "Vector2D.h"
+#include "SpriteSourceLibrary.h"
 #include "Stream.h"
+#include "SpriteSource.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -52,7 +52,7 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Private Static Variables:
 	//--------------------------------------------------------------------------
-
+	std::unordered_map<std::string, const SpriteSource*> SpriteSourceLibrary::spriteSources;
 	//--------------------------------------------------------------------------
 	// Private Variables:
 	//--------------------------------------------------------------------------
@@ -63,18 +63,15 @@ namespace CS529
 
 #pragma region Constructors
 
-	SpriteSource::SpriteSource(void)
+	SpriteSourceLibrary::SpriteSourceLibrary(void)
 	{
 	}
 
 	//--------------------------------------------------------------------------
 
-	SpriteSource::~SpriteSource(void)
+	SpriteSourceLibrary::~SpriteSourceLibrary(void)
 	{
-		if (textureResource)
-		{
-			DGL_Graphics_FreeTexture(const_cast<DGL_Texture**>(&textureResource));
-		}
+		DeleteAll();
 	}
 
 #pragma endregion Constructors
@@ -82,6 +79,15 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Public Static Functions:
 	//--------------------------------------------------------------------------
+	void SpriteSourceLibrary::DeleteAll()
+	{
+		for (auto& pair : spriteSources)
+		{
+			delete pair.second;
+			pair.second = nullptr;
+		}
+		spriteSources.clear();
+	}
 
 #pragma region Public Static Functions
 
@@ -90,76 +96,35 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Public Functions:
 	//--------------------------------------------------------------------------
-	void SpriteSource::LoadTexture(unsigned numCols, unsigned numRows, std::string_view textureName)
-	{
-		this->numCols = numCols;
-		this->numRows = numRows;
 
-		textureResource = DGL_Graphics_LoadTexture(textureName.data());
-	}
-
-	unsigned SpriteSource::GetFrameCount() const
+	const SpriteSource* SpriteSourceLibrary::Build(const std::string& spriteSourceName)
 	{
-		return numCols * numRows;
-	}
-
-	void SpriteSource::UseTexture() const
-	{
-		if (textureResource)
+		const SpriteSource* existingSpriteSource = Find(spriteSourceName);
+		if (existingSpriteSource)
 		{
-			DGL_Graphics_SetTexture(textureResource);
+			return existingSpriteSource;
 		}
-	}
 
-	// @brief Calculates the UV offset for the specified frame.
-	// @brief [HINT: Refer to the "Sprite Sources" slide deck for implementation details.]
-	//
-	// @param frameIndex = The index of the frame within a spritesheet to be displayed.
-	// @param uv = A structure to be filled with the calculated UV values.
-	void SpriteSource::CalculateTextureOffset(unsigned frameIndex, Vector2D& uv) const
-	{
-		float uSize = 1.0f / numCols;
-		float vSize = 1.0f / numRows;
-
-		float uOffset = uSize * (frameIndex % numCols);
-		float vOffset = vSize * (frameIndex / numCols);
-
-		uv.Set(uOffset, vOffset);
-	}
-
-	// @brief Calculates the UV offset for the specified frame and passes it to the DGL.
-	// @brief Specific Steps:
-	// @brief   Create a Vector2D variable called 'uv'.
-	// @brief   Call CalculateTextureOffset
-	// @brief   Call DGL_Graphics_SetCB_TextureOffset
-	//
-	// @param frameIndex = The index of the frame within a spritesheet to be displayed.
-	void SpriteSource::SetTextureOffset(unsigned frameIndex) const
-	{
-		Vector2D uv;
-		CalculateTextureOffset(frameIndex, uv);
-		DGL_Graphics_SetCB_TextureOffset(&uv);
-	}
-
-	void SpriteSource::Read(Stream& stream)
-	{
-		if (stream.IsValid())
+		std::string filePath = "./Data/SpriteSources/" + spriteSourceName + ".json";
+		Stream stream(filePath);
+		if (stream.IsValid() && stream.Contains("SpriteSource"))
 		{
-			stream.PushNode("SpriteSource");
-			stream.Read("NumCols", numCols);
-			stream.Read("NumRows", numRows);
+			SpriteSource* spriteSource = new SpriteSource();
+			spriteSource->Read(stream);
+			spriteSources.insert({ spriteSourceName, spriteSource });
 
-			std::string textureName;
-			stream.Read("Texture", textureName);
-			if (textureName != "")
-			{
-				std::string filePath;
-				filePath.append("Assets/").append(textureName);
-				LoadTexture(numCols, numRows, filePath);
-			}
-			stream.PopNode();
+			return spriteSource;
 		}
+
+		return nullptr;
 	}
+
+	const SpriteSource* SpriteSourceLibrary::Find(const std::string spriteSourceName)
+	{
+		if (auto search = spriteSources.find(spriteSourceName); search != spriteSources.end()) return search->second;
+		return nullptr;
+	}
+
 #pragma region Public Functions
 
 #pragma endregion Public Functions

@@ -22,6 +22,7 @@
 #include "Mesh.h"
 #include "Stream.h"
 #include "MeshLibrary.h"
+#include "SpriteSourceLibrary.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -127,7 +128,7 @@ namespace CS529
 				Matrix2D matrix = transform->GetMatrix();
 				Matrix2D offset;
 
-				offset.Translate(transform->Scale().x, 1.0f);
+				offset.Translate(transform->Scale().x, 0.0f);
 				for (char c : text)
 				{
 					if (spriteSource)
@@ -161,6 +162,14 @@ namespace CS529
 		{
 			mesh = MeshLibrary::Build(meshName);
 		}
+		std::string spriteSourceName;
+		stream.PushNode("Sprite");
+		stream.Read("SpriteSource", spriteSourceName);
+		if (spriteSourceName != "")
+		{
+			spriteSource = SpriteSourceLibrary::Build(spriteSourceName);
+		}
+		stream.PopNode();
 	}
 
 	void Sprite::SetFrame(unsigned frame)

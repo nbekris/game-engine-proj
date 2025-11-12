@@ -25,6 +25,7 @@
 #include "PlatformSystem.h"
 #include "CheatSystem.h"
 #include "SceneSystem.h"
+#include "ScoreSystem.h"
 
 using namespace CS529;
 
@@ -49,6 +50,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     engine.AddSystem(new PlatformSystem(hInstance, nCmdShow));
 	engine.AddSystem(new CheatSystem());
     engine.AddSystem(new SceneSystem());
+    engine.AddSystem(new ScoreSystem());
 
     // Initialize the systems once they have all been constructed.
     bool isRunning = engine.Initialize();

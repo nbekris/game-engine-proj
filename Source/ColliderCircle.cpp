@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	SpriteSource.cpp
+// File Name:	ColliderCircle.cpp
 // Author(s):	bekri
 // Course:		CS529F25
 // Project:		Project 1
@@ -15,9 +15,13 @@
 //------------------------------------------------------------------------------
 
 #include "Precompiled.h"
-#include "SpriteSource.h"
-#include "Vector2D.h"
+#include "ColliderCircle.h"
+#include "Transform.h"
+#include "Entity.h"
+#include "Physics.h"
 #include "Stream.h"
+
+#include <iostream>
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -63,19 +67,16 @@ namespace CS529
 
 #pragma region Constructors
 
-	SpriteSource::SpriteSource(void)
+	ColliderCircle::ColliderCircle(void)
 	{
+	}
+
+	ColliderCircle::ColliderCircle(const ColliderCircle* other)
+	{
+		radius = other->radius;
 	}
 
 	//--------------------------------------------------------------------------
-
-	SpriteSource::~SpriteSource(void)
-	{
-		if (textureResource)
-		{
-			DGL_Graphics_FreeTexture(const_cast<DGL_Texture**>(&textureResource));
-		}
-	}
 
 #pragma endregion Constructors
 
@@ -90,76 +91,40 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Public Functions:
 	//--------------------------------------------------------------------------
-	void SpriteSource::LoadTexture(unsigned numCols, unsigned numRows, std::string_view textureName)
+	
+	void ColliderCircle::Read(Stream& stream)
 	{
-		this->numCols = numCols;
-		this->numRows = numRows;
-
-		textureResource = DGL_Graphics_LoadTexture(textureName.data());
-	}
-
-	unsigned SpriteSource::GetFrameCount() const
-	{
-		return numCols * numRows;
-	}
-
-	void SpriteSource::UseTexture() const
-	{
-		if (textureResource)
+		if (&stream)
 		{
-			DGL_Graphics_SetTexture(textureResource);
-		}
-	}
-
-	// @brief Calculates the UV offset for the specified frame.
-	// @brief [HINT: Refer to the "Sprite Sources" slide deck for implementation details.]
-	//
-	// @param frameIndex = The index of the frame within a spritesheet to be displayed.
-	// @param uv = A structure to be filled with the calculated UV values.
-	void SpriteSource::CalculateTextureOffset(unsigned frameIndex, Vector2D& uv) const
-	{
-		float uSize = 1.0f / numCols;
-		float vSize = 1.0f / numRows;
-
-		float uOffset = uSize * (frameIndex % numCols);
-		float vOffset = vSize * (frameIndex / numCols);
-
-		uv.Set(uOffset, vOffset);
-	}
-
-	// @brief Calculates the UV offset for the specified frame and passes it to the DGL.
-	// @brief Specific Steps:
-	// @brief   Create a Vector2D variable called 'uv'.
-	// @brief   Call CalculateTextureOffset
-	// @brief   Call DGL_Graphics_SetCB_TextureOffset
-	//
-	// @param frameIndex = The index of the frame within a spritesheet to be displayed.
-	void SpriteSource::SetTextureOffset(unsigned frameIndex) const
-	{
-		Vector2D uv;
-		CalculateTextureOffset(frameIndex, uv);
-		DGL_Graphics_SetCB_TextureOffset(&uv);
-	}
-
-	void SpriteSource::Read(Stream& stream)
-	{
-		if (stream.IsValid())
-		{
-			stream.PushNode("SpriteSource");
-			stream.Read("NumCols", numCols);
-			stream.Read("NumRows", numRows);
-
-			std::string textureName;
-			stream.Read("Texture", textureName);
-			if (textureName != "")
-			{
-				std::string filePath;
-				filePath.append("Assets/").append(textureName);
-				LoadTexture(numCols, numRows, filePath);
-			}
+			stream.PushNode("ColliderCircle");
+			stream.Read("Radius", radius);
 			stream.PopNode();
 		}
 	}
+
+	bool ColliderCircle::IsColliding(const Collider* other) const
+	{
+		// maybe use static cast here instead, its more efficient but not safe?
+		// reason: dynamic cast will actually set variable to null pointer if cast fails
+		// trade off: greater memory overhead since we are storing type info pointers,
+		// also performing a runtime type check which can slow things down in loops that 
+		// run many times.
+		const ColliderCircle* colliderCircle = dynamic_cast<const ColliderCircle*>(other);
+		if (colliderCircle)
+		{
+			Vector2D translation = this->Parent()->Get<Transform>()->Translation();
+			Vector2D otherTranslation = other->Parent()->Get<Transform>()->Translation();
+
+			float distance = translation.SquareDistance(otherTranslation);
+			float sqCheck = std::powf(this->Radius() + colliderCircle->Radius(), 2.0f);
+			if (distance <= sqCheck)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 #pragma region Public Functions
 
 #pragma endregion Public Functions

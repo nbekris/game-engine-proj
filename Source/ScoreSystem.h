@@ -101,7 +101,7 @@ namespace CS529
 		// Private Variables:
 	private:
 		// [NOTE: You may change these individual variables into an array, if you wish.]
-	
+		int currentVal{ -1 };
 		// @brief The existing score for the current game.
 		unsigned score{ 0 };
 

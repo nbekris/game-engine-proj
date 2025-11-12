@@ -1,12 +1,13 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	SpriteSource.cpp
+// File Name:	Random.cpp
 // Author(s):	bekri
 // Course:		CS529F25
 // Project:		Project 1
 // Purpose:		Template for a new .cpp file.
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
+// sources: https://learn.microsoft.com/en-us/cpp/standard-library/random
 //
 //------------------------------------------------------------------------------
 
@@ -15,9 +16,9 @@
 //------------------------------------------------------------------------------
 
 #include "Precompiled.h"
-#include "SpriteSource.h"
-#include "Vector2D.h"
-#include "Stream.h"
+#include "Random.h"
+#include <ctime>
+#include <iostream>
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -51,8 +52,8 @@ namespace CS529
 
 	//--------------------------------------------------------------------------
 	// Private Static Variables:
-	//--------------------------------------------------------------------------
-
+	// -----------------------------------------------------------
+	std::mt19937 Random::generator;
 	//--------------------------------------------------------------------------
 	// Private Variables:
 	//--------------------------------------------------------------------------
@@ -63,18 +64,14 @@ namespace CS529
 
 #pragma region Constructors
 
-	SpriteSource::SpriteSource(void)
+	Random::Random(void)
 	{
 	}
 
 	//--------------------------------------------------------------------------
 
-	SpriteSource::~SpriteSource(void)
+	Random::~Random(void)
 	{
-		if (textureResource)
-		{
-			DGL_Graphics_FreeTexture(const_cast<DGL_Texture**>(&textureResource));
-		}
 	}
 
 #pragma endregion Constructors
@@ -85,80 +82,30 @@ namespace CS529
 
 #pragma region Public Static Functions
 
+
 #pragma endregion Public Static Functions
 
 	//--------------------------------------------------------------------------
 	// Public Functions:
 	//--------------------------------------------------------------------------
-	void SpriteSource::LoadTexture(unsigned numCols, unsigned numRows, std::string_view textureName)
+	void Random::Initialize()
 	{
-		this->numCols = numCols;
-		this->numRows = numRows;
-
-		textureResource = DGL_Graphics_LoadTexture(textureName.data());
+		generator.seed(static_cast<unsigned int>(time(nullptr)));
 	}
 
-	unsigned SpriteSource::GetFrameCount() const
+	int Random::Range(int rangeMin, int RangeMax)
 	{
-		return numCols * numRows;
+		std::uniform_int_distribution<int> dist(rangeMin, RangeMax);
+		return dist(generator);
 	}
 
-	void SpriteSource::UseTexture() const
+	float Random::Range(float rangeMin, float RangeMax)
 	{
-		if (textureResource)
-		{
-			DGL_Graphics_SetTexture(textureResource);
-		}
-	}
-
-	// @brief Calculates the UV offset for the specified frame.
-	// @brief [HINT: Refer to the "Sprite Sources" slide deck for implementation details.]
-	//
-	// @param frameIndex = The index of the frame within a spritesheet to be displayed.
-	// @param uv = A structure to be filled with the calculated UV values.
-	void SpriteSource::CalculateTextureOffset(unsigned frameIndex, Vector2D& uv) const
-	{
-		float uSize = 1.0f / numCols;
-		float vSize = 1.0f / numRows;
-
-		float uOffset = uSize * (frameIndex % numCols);
-		float vOffset = vSize * (frameIndex / numCols);
-
-		uv.Set(uOffset, vOffset);
-	}
-
-	// @brief Calculates the UV offset for the specified frame and passes it to the DGL.
-	// @brief Specific Steps:
-	// @brief   Create a Vector2D variable called 'uv'.
-	// @brief   Call CalculateTextureOffset
-	// @brief   Call DGL_Graphics_SetCB_TextureOffset
-	//
-	// @param frameIndex = The index of the frame within a spritesheet to be displayed.
-	void SpriteSource::SetTextureOffset(unsigned frameIndex) const
-	{
-		Vector2D uv;
-		CalculateTextureOffset(frameIndex, uv);
-		DGL_Graphics_SetCB_TextureOffset(&uv);
-	}
-
-	void SpriteSource::Read(Stream& stream)
-	{
-		if (stream.IsValid())
-		{
-			stream.PushNode("SpriteSource");
-			stream.Read("NumCols", numCols);
-			stream.Read("NumRows", numRows);
-
-			std::string textureName;
-			stream.Read("Texture", textureName);
-			if (textureName != "")
-			{
-				std::string filePath;
-				filePath.append("Assets/").append(textureName);
-				LoadTexture(numCols, numRows, filePath);
-			}
-			stream.PopNode();
-		}
+		std::uniform_real_distribution<float> dist(
+			rangeMin,
+			std::nextafter(RangeMax, std::numeric_limits<float>::max())
+		);
+		return dist(generator);
 	}
 #pragma region Public Functions
 

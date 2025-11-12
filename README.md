@@ -1,2 +1,4 @@
 # game-engine-proj
 Game engine project for the MSCS program at DigiPen
+
+This project implements techniques in real-time interactive simulation and video game implementations. It introduces 2D and 3D game engine architecture, including game and system components separation, game flow, game state manager, handling input/output, and the frame rate controller. This game engine uses Windows SDK and graphics library DirectX API. This game engine project has helped me to practice techniques such as space partitioning, AI techniques, particle systems, and collision algorithms. Several physics techniques are implemented, such as jump and reflection, in addition to behavior algorithms, such as state machines. Different game genres are also represented in the engine, including Asteroids (2D) and Platform (2D). Other implementations include collision, matrices, and vector libraries, according to the specific requirements for different games.

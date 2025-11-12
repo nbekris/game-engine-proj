@@ -129,6 +129,7 @@ namespace CS529
 			&Vertex_Pos_Trc, &DGL_Color_Black, &adjustedUV_Trc);
 
 		meshResource = DGL_Graphics_EndMesh();
+		//this->drawMode = DGL_DM_TRIANGLELIST();
 
 		assert(meshResource && "Failed to create mesh!");
 
@@ -166,9 +167,36 @@ namespace CS529
 			{
 				BuildSpaceship();
 			}
+			else if (stream.Contains("Vertices"))
+			{
+				auto lambda = [&stream]() 
+					{
+						Vector2D position;
+						Vector2D uvOffsets;
+						std::vector<float> color(4);
+						stream.ReadVector2D("Position", position);
+						stream.ReadVector2D("UV", uvOffsets);
+						stream.Read("Color", color);
+						const DGL_Color dglColor = { color[0], color[1], color[2], 1.0 };
+						DGL_Graphics_AddVertex(&position, &dglColor, &uvOffsets);
+					};
+				DGL_Graphics_StartMesh();
+				stream.ReadArray("Vertices", lambda);
+				meshResource = DGL_Graphics_EndMesh();
+
+				assert(meshResource && "Failed to create mesh!");
+			}
+			else if (stream.Contains("Quad"))
+			{
+				unsigned int numCols;
+				unsigned int numRows;
+				stream.Read("NumCols", numCols);
+				stream.Read("NumRows", numRows);
+				BuildQuad(1.0f / numCols, 1.0f / numRows, "name");
+			}
 			else
 			{
-				LoggingSystem::Verbose("Warning: Could not find mesh name: ", name);
+				LoggingSystem::Warning("No Mesh found in json.");
 			}
 			stream.PopNode();
 		}

@@ -49,6 +49,7 @@ namespace CS529
 		// @brief [HINT: This can be done using "DGL_Mat4{}" in the initializer list.]
 		// @brief [HINT: The body of the constructor should be empty.]
 		Matrix2D(void);
+		~Matrix2D(void);
 
 		// Public Static Functions:
 	public:

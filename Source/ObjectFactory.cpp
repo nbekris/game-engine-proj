@@ -25,6 +25,10 @@
 #include "Behavior.h"
 #include "BehaviorSpaceship.h"
 #include "BehaviorBullet.h"
+#include "BehaviorTeleporter.h"
+#include "BehaviorAsteroid.h"
+#include "BehaviorHudText.h"
+#include "ColliderCircle.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -78,6 +82,10 @@ namespace CS529
 		Register("Animation", []() -> Object* { return new Animation(); });
 		Register("BehaviorSpaceship", []() -> Object* { return new BehaviorSpaceship(); });
 		Register("BehaviorBullet", []() -> Object* { return new BehaviorBullet(); });
+		Register("BehaviorTeleporter", []() -> Object* { return new BehaviorTeleporter(); });
+		Register("BehaviorAsteroid", []() -> Object* { return new BehaviorAsteroid(); });
+		Register("BehaviorHudText", []() -> Object* { return new BehaviorHudText(); });
+		Register("ColliderCircle", []() -> Object* { return new ColliderCircle();  });
 	}
 
 	//--------------------------------------------------------------------------

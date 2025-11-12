@@ -78,14 +78,21 @@ namespace CS529
 		// @brief Unload any large assets loaded for the scene.
 		void Unload() override;
 
+		void SpawnWave();
+
+		void SpawnAsteroid();
+
 		// Private Constants:
 	private:
+		const unsigned asteroidSpawnInitial = 8;
+		const unsigned asteroidSpawnMaximum = 20;
 
 		// Private Static Variables:
 	private:
 
 		// Private Variables:
 	private:
+		unsigned asteroidSpawnCount;
 	};
 
 }	// namespace

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	BehaviorBullet.h
-// Author(s):	dschilling
+// File Name:	BehaviorHudText.h
+// Author(s):	bekri
 // Course:		CS529F25
 // Project:		Project 4
 // Purpose:		This derived class is responsible for the behavior associated
@@ -18,6 +18,7 @@
 //------------------------------------------------------------------------------
 
 #include "Behavior.h"
+#include "ScoreSystem.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -35,24 +36,24 @@ namespace CS529
 	// Typedefs:
 
 	// Class Definition:
-	class BehaviorBullet : public Behavior
+	class BehaviorHudText : public Behavior
 	{
 		// Public Constants and Enums:
 	public:
 
 		// Constructors/Destructors:
 	public:
-		BehaviorBullet(void);
+		BehaviorHudText(void);
 
 		// @brief This copy-constructor should perform a shallow copy of the data.
-		BehaviorBullet(const BehaviorBullet* other);
+		BehaviorHudText(const BehaviorHudText* other);
 
 		// Public Static Functions:
 	public:
 
 		// Public Functions:
 	public:
-		// @brief Read the properties of a BehaviorBullet component from a stream.
+		// @brief Read the properties of a BehaviorHudText component from a stream.
 		// @brief [NOTE: The base Behavior variables must be read using Behavior::Read().]
 		//
 		// @param stream = The data stream used for reading.
@@ -62,15 +63,16 @@ namespace CS529
 	public:
 
 		// Private Functions:
-		static void CollisionHandler(Entity* entityA, const Entity* entityB);
 	private:
 		// @brief This function is required to invoke the copy-constructor in derived classes.
-		BehaviorBullet* Clone() const override { return new BehaviorBullet(this); }
+		BehaviorHudText* Clone() const override { return new BehaviorHudText(this); }
 
 		// Behavior Finite-State Machine (FSM) functions.
 		void onInit() override;
 		void onUpdate(float dt) override;
 		void onExit() override;
+
+		void UpdateText();
 
 		// Private Constants:
 	private:
@@ -86,6 +88,17 @@ namespace CS529
 
 		// Private Variables:
 	private:
+		// Identifies which score system value is associated with this hug text
+		ScoreSystem::ScoreSystemId scoreSystemId;
+		// The score system value currently being displayed.
+		// [NOTE: This is a variation on lazy initialization, in that the displayString
+		// will only be reformatted when this display value changes.]
+		unsigned displayValue;
+		// Contains the formatting string necessary to generate the display string.
+		std::string labelString;
+		// Contains the final, formatted text to be displayed on screen.
+		std::string displayString;
+
 	};
 
 }	// namespace
