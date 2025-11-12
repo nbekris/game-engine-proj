@@ -84,7 +84,7 @@ namespace CS529
 
 		// Private Constants:
 	private:
-		const unsigned asteroidSpawnInitial = 9;
+		const unsigned asteroidSpawnInitial = 8;
 		const unsigned asteroidSpawnMaximum = 20;
 
 		// Private Static Variables:

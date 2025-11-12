@@ -71,6 +71,8 @@ namespace CS529
 	BehaviorHudText::BehaviorHudText(void)
 		: Behavior()
 	{
+		displayValue = 0;
+		scoreSystemId = ScoreSystem::SsiScore;
 	}
 
 	BehaviorHudText::BehaviorHudText(const BehaviorHudText* other)
@@ -141,7 +143,7 @@ namespace CS529
 	void BehaviorHudText::UpdateText()
 	{
 		displayValue = ScoreSystem::Instance().GetValue(scoreSystemId);
-		displayString = std::format("{} : {}", labelString, displayValue);
+		displayString = std::format("{} {}", labelString, displayValue);
 
 		Sprite* sprite = Parent()->Get<Sprite>();
 		if (sprite)

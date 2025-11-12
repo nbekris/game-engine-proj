@@ -95,14 +95,17 @@ namespace CS529
 
 	int Random::Range(int rangeMin, int RangeMax)
 	{
-		std::uniform_real_distribution<> dist(rangeMin, RangeMax);
-		return (int)dist(generator);
+		std::uniform_int_distribution<int> dist(rangeMin, RangeMax);
+		return dist(generator);
 	}
 
 	float Random::Range(float rangeMin, float RangeMax)
 	{
-		std::uniform_real_distribution<> dist(rangeMin, RangeMax);
-		return (float)dist(generator);
+		std::uniform_real_distribution<float> dist(
+			rangeMin,
+			std::nextafter(RangeMax, std::numeric_limits<float>::max())
+		);
+		return dist(generator);
 	}
 #pragma region Public Functions
 

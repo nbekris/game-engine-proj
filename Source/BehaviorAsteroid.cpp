@@ -27,6 +27,8 @@
 #include "ColliderCircle.h"
 #include "ScoreSystem.h"
 
+#include "iostream"
+
 //------------------------------------------------------------------------------
 // External Declarations:
 //------------------------------------------------------------------------------
@@ -151,6 +153,9 @@ namespace CS529
 		float angle = 0;
 		switch (origin)
 		{
+		case cAsteroidOriginTlc:
+			angle = Random::Range(100.0f, 170.0f);
+			break;
 		case cAsteroidOriginTrc:
 			angle = Random::Range(-80.0f, -10.0f);
 			break;
@@ -159,9 +164,6 @@ namespace CS529
 			break;
 		case cAsteroidOriginBrc:
 			angle = Random::Range(10.0f, 80.0f);
-			break;
-		case cAsteroidOriginTlc:
-			angle = Random::Range(100.0f, 170.0f);
 			break;
 		}
 		Vector2D dirVec;
