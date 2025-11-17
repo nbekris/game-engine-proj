@@ -20,6 +20,8 @@
 #include "Collider.h"
 #include "ColliderCircle.h"
 
+#include "LoggingSystem.h"
+
 //------------------------------------------------------------------------------
 // External Declarations:
 //------------------------------------------------------------------------------
@@ -116,6 +118,19 @@ namespace CS529
 		{
 			entity->Render();
 		}
+	}
+
+	void EntityContainer::Add(Entity* entity)
+	{
+		if (entity && entity->Initialize())
+		{
+			entities.push_back(entity);
+		}
+		else 
+		{
+			LoggingSystem::Verbose("Entity failed initialization : {}", entity->Name());
+		}
+
 	}
 
 	Entity* EntityContainer::FindByName(std::string_view findName) const

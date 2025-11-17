@@ -21,7 +21,7 @@
         "StateNext": 0
       },
       "ColliderCircle": {
-        "Radius": 45.0
+        "Radius": 22.5
       }
     }
   }

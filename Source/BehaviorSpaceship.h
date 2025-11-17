@@ -79,7 +79,9 @@ namespace CS529
 		void UpdateRotation() const;
 
 		// @brief Update the velocity, applying an acceleration in the direction of the ship.
-		void UpdateVelocity(float dt) const;
+		void UpdateVelocity(float dt, bool isReverseThrust) const;
+
+		void UpdateDrag() const;
 
 		// @brief Update the weapon firing, based upon keyboard input.
 		void UpdateWeapon(float dt);

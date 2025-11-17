@@ -111,9 +111,14 @@ namespace CS529
 			oldTranslation = translation;
 
 			velocity.ScaleAdd(dt, acceleration);
+
+			velocity.Scale(drag);
+
 			translation.ScaleAdd(dt, velocity);
 
 			rotation += rotationalVelocity * dt;
+
+
 
 			transform->Rotation(rotation);
 			transform->Translation(translation);

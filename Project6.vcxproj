@@ -300,6 +300,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Source\OmegaScene.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Source\Physics.cpp">
       <SubType>
       </SubType>
@@ -462,6 +466,10 @@
     </ClInclude>
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\ObjectFactory.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Source\OmegaScene.h">
       <SubType>
       </SubType>
     </ClInclude>
