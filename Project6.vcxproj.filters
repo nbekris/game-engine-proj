@@ -244,6 +244,9 @@
     <ClCompile Include="Source\OmegaScene.cpp">
       <Filter>Source Files\Game\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ColliderLine.cpp">
+      <Filter>Source Files\Engine\Entities\Components\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Precompiled.h">

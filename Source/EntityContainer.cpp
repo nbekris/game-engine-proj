@@ -19,6 +19,7 @@
 #include "Entity.h"
 #include "Collider.h"
 #include "ColliderCircle.h"
+#include "ColliderLine.h"
 
 #include "LoggingSystem.h"
 
@@ -126,9 +127,13 @@ namespace CS529
 		{
 			entities.push_back(entity);
 		}
-		else 
+		else if (entity)
 		{
-			LoggingSystem::Verbose("Entity failed initialization : {}", entity->Name());
+			LoggingSystem::Verbose("Add Entity failed initialization : {}", entity->Name());
+		}
+		else
+		{
+			LoggingSystem::Verbose("Add Entity failed: Entity is NULL");
 		}
 
 	}
@@ -148,14 +153,32 @@ namespace CS529
 
 	void EntityContainer::CheckCollisions() const
 	{
+		Collider* colliderA;
+		Collider* colliderB;
 		for (int i = 0; i < entities.size(); ++i)
 		{
-			Collider* colliderA = entities[i]->Get<ColliderCircle>();
+			if (entities[i]->Name() == "Arena")
+			{
+				colliderA = entities[i]->Get<ColliderLine>();
+			}
+			else 
+			{
+				colliderA = entities[i]->Get<ColliderCircle>();
+			}
+
 			if (colliderA)
 			{
 				for (int j = i + 1; j < entities.size(); ++j)
 				{
-					Collider* colliderB = entities[j]->Get<ColliderCircle>();
+					if (entities[i]->Name() == "Arena")
+					{
+						colliderB = entities[j]->Get<ColliderCircle>();
+					}
+					else
+					{
+						colliderB = entities[j]->Get<ColliderCircle>();
+					}
+
 					if (colliderB)
 					{
 						colliderA->CheckCollision(colliderB);

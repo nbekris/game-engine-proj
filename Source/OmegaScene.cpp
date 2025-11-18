@@ -77,7 +77,7 @@ namespace CS529
 	OmegaScene::OmegaScene()
 		: Scene("OmegaScene")
 	{
-		OmegapawnCount = OmegapawnInitial;
+		OmegaSpawnCount = OmegaSpawnInitial;
 	}
 
 #pragma endregion Constructors
@@ -135,7 +135,7 @@ namespace CS529
 		this->AddEntity(OmegaWaveEntity);
 
 		ScoreSystem::Instance().Reset();
-		OmegapawnCount = OmegapawnInitial;
+		OmegaSpawnCount = OmegaSpawnInitial;
 
 		return true;
 	}
@@ -177,12 +177,12 @@ namespace CS529
 	void OmegaScene::SpawnWave()
 	{
 		ScoreSystem::Instance().IncreaseWave();
-		for (unsigned int i = 0; i < OmegapawnCount; ++i)
+		for (unsigned int i = 0; i < OmegaSpawnCount; ++i)
 		{
 			SpawnAsteroid();
 		}
 
-		OmegapawnCount = OmegapawnCount != OmegapawnMaximum ? ++OmegapawnCount : OmegapawnMaximum;
+		OmegaSpawnCount = OmegaSpawnCount != OmegaSpawnMaximum ? ++OmegaSpawnCount : OmegaSpawnMaximum;
 	}
 
 	void OmegaScene::SpawnAsteroid()

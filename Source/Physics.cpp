@@ -71,6 +71,7 @@ namespace CS529
 	Physics::Physics(const Physics* other)
 	{
 		velocity = other->velocity;
+		oldTranslation = other->oldTranslation;
 		acceleration = other->acceleration;
 	}
 
