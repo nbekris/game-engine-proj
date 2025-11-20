@@ -71,6 +71,7 @@ namespace CS529
 	Physics::Physics(const Physics* other)
 	{
 		velocity = other->velocity;
+		oldTranslation = other->oldTranslation;
 		acceleration = other->acceleration;
 	}
 
@@ -111,9 +112,14 @@ namespace CS529
 			oldTranslation = translation;
 
 			velocity.ScaleAdd(dt, acceleration);
+
+			velocity.Scale(drag);
+
 			translation.ScaleAdd(dt, velocity);
 
 			rotation += rotationalVelocity * dt;
+
+
 
 			transform->Rotation(rotation);
 			transform->Translation(translation);

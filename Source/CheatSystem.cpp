@@ -23,6 +23,7 @@
 #include "Level2Scene.h"
 #include "SandboxScene.h"
 #include "AsteroidsScene.h"
+#include "OmegaScene.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -109,6 +110,10 @@ namespace CS529
 		else if (DGL_Input_KeyTriggered('3'))
 		{
 			SceneSystem::SetPendingScene<AsteroidsScene>();
+		}
+		else if (DGL_Input_KeyTriggered('4'))
+		{
+			SceneSystem::SetPendingScene<OmegaScene>();
 		}
 		else if (DGL_Input_KeyTriggered('9'))
 		{

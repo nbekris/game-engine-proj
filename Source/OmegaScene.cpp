@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	ObjectFactory.cpp
+// File Name:	OmegaScene.cpp
 // Author(s):	bekri
 // Course:		CS529F25
 // Project:		Project 1
-// Purpose:		Template for a new .cpp file.
+// Purpose:		Template class for a new scene.
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
 //
@@ -15,21 +15,20 @@
 //------------------------------------------------------------------------------
 
 #include "Precompiled.h"
-#include "ObjectFactory.h"
-#include "LoggingSystem.h"
+#include <Windows.h>
 
+#include "OmegaScene.h"
+#include "Scene.h"
+#include "SceneSystem.h"
+
+#include "EntityFactory.h"
+#include "MeshLibrary.h"
+#include "Mesh.h"
+#include "Entity.h"
 #include "Transform.h"
 #include "Sprite.h"
-#include "Physics.h"
-#include "Animation.h"
-#include "Behavior.h"
-#include "BehaviorSpaceship.h"
-#include "BehaviorBullet.h"
-#include "BehaviorTeleporter.h"
-#include "BehaviorAsteroid.h"
-#include "BehaviorHudText.h"
-#include "ColliderCircle.h"
-#include "ColliderLine.h"
+#include "ScoreSystem.h"
+#include "SpriteSourceLibrary.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -56,7 +55,7 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Private Static Constants:
 	//--------------------------------------------------------------------------
-
+	static const DGL_Color DGL_Color_Black = { 0.0f, 0.0f, 0.0f, 1.0f };
 	//--------------------------------------------------------------------------
 	// Private Constants:
 	//--------------------------------------------------------------------------
@@ -75,25 +74,10 @@ namespace CS529
 
 #pragma region Constructors
 
-	ObjectFactory::ObjectFactory(void)
+	OmegaScene::OmegaScene()
+		: Scene("OmegaScene")
 	{
-		Register("Transform", []() -> Object* { return new Transform(); });
-		Register("Sprite", []() -> Object* { return new Sprite(); });
-		Register("Physics", []() -> Object* { return new Physics(); });
-		Register("Animation", []() -> Object* { return new Animation(); });
-		Register("BehaviorSpaceship", []() -> Object* { return new BehaviorSpaceship(); });
-		Register("BehaviorBullet", []() -> Object* { return new BehaviorBullet(); });
-		Register("BehaviorTeleporter", []() -> Object* { return new BehaviorTeleporter(); });
-		Register("BehaviorAsteroid", []() -> Object* { return new BehaviorAsteroid(); });
-		Register("BehaviorHudText", []() -> Object* { return new BehaviorHudText(); });
-		Register("ColliderCircle", []() -> Object* { return new ColliderCircle();  });
-		Register("ColliderLine", []() -> Object* { return new ColliderLine();  });
-	}
-
-	//--------------------------------------------------------------------------
-
-	ObjectFactory::~ObjectFactory(void)
-	{
+		OmegaSpawnCount = OmegaSpawnInitial;
 	}
 
 #pragma endregion Constructors
@@ -112,27 +96,6 @@ namespace CS529
 
 #pragma region Public Functions
 
-	bool ObjectFactory::Register(const std::string& objectName, objectConstructor constructor)
-	{
-		if (registry.contains(objectName))
-		{
-			LoggingSystem::Verbose("ObjectFactory::Register: Attempted to register duplicate object name: {}", objectName);
-			return false;
-		}
-
-		registry.insert({ objectName, constructor });
-		return true;
-	}
-
-	Object* ObjectFactory::Create(const std::string& objectName) const
-	{
-		if (auto search = registry.find(objectName); search != registry.end())
-		{
-			return search->second();
-		}
-		return nullptr;
-	}
-
 #pragma endregion Public Functions
 
 	//--------------------------------------------------------------------------
@@ -140,6 +103,97 @@ namespace CS529
 	//--------------------------------------------------------------------------
 
 #pragma region Private Functions
+
+	void OmegaScene::Load()
+	{
+		ScoreSystem::Instance().NewGame();
+	}
+
+	bool OmegaScene::Initialize()
+	{
+		Entity* arenaEntity = EntityFactory::Build("Arena");
+		if (arenaEntity)
+		{
+			this->AddEntity(arenaEntity);
+		}
+		Entity* spaceshipEntity = EntityFactory::Build("SpaceshipOmega");
+
+		if (spaceshipEntity)
+		{
+			this->AddEntity(spaceshipEntity);
+		}
+
+		DGL_Graphics_SetBackgroundColor(&DGL_Color_Black);
+		DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
+
+		Entity* scoreEntity = EntityFactory::Build("OmegaScore");
+		Entity* highScoreEntity = EntityFactory::Build("OmegaHighScore");
+		Entity* OmegaWaveEntity = EntityFactory::Build("OmegaWaveCount");
+
+		this->AddEntity(scoreEntity);
+		this->AddEntity(highScoreEntity);
+		this->AddEntity(OmegaWaveEntity);
+
+		ScoreSystem::Instance().Reset();
+		OmegaSpawnCount = OmegaSpawnInitial;
+
+		return true;
+	}
+
+	void OmegaScene::Update(float dt)
+	{
+		// Tell the compiler that the 'dt' variable is unused.
+		UNREFERENCED_PARAMETER(dt);
+
+		if (!FindEntity("Asteroid"))
+		{
+			SpawnWave();
+		}
+
+		UpdateEntities(dt);
+
+		CheckCollisions();
+		// NOTE: This call causes the engine to exit immediately.
+		//   Make sure to remove it when you are ready to test out a new scene.
+	}
+
+	void OmegaScene::Render() const
+	{
+		RenderEntities();
+	}
+
+	void OmegaScene::Shutdown()
+	{
+		DeleteEntities();
+		EntityFactory::DeleteAll();
+	}
+
+	void OmegaScene::Unload()
+	{
+		MeshLibrary::DeleteAll();
+		SpriteSourceLibrary::DeleteAll();
+	}
+
+	void OmegaScene::SpawnWave()
+	{
+		ScoreSystem::Instance().IncreaseWave();
+		for (unsigned int i = 0; i < OmegaSpawnCount; ++i)
+		{
+			SpawnAsteroid();
+		}
+
+		OmegaSpawnCount = OmegaSpawnCount != OmegaSpawnMaximum ? ++OmegaSpawnCount : OmegaSpawnMaximum;
+	}
+
+	void OmegaScene::SpawnAsteroid()
+	{
+		Entity* entity = EntityFactory::Build("Asteroid");
+		if (entity)
+		{
+			AddEntity(entity);
+			entity->Get<Transform>()->Translation({ 0.0f, 0.0f });
+		}
+	}
 
 #pragma endregion Private Functions
 

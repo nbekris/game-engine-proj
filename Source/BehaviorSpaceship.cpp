@@ -28,6 +28,8 @@
 #include "ColliderCircle.h"
 #include <numbers>
 
+#include <iostream>
+
 //------------------------------------------------------------------------------
 // External Declarations:
 //------------------------------------------------------------------------------
@@ -49,7 +51,7 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Public Variables:
 	//--------------------------------------------------------------------------
-
+	float drag = 0.0f;
 	//--------------------------------------------------------------------------
 	// Private Static Constants:
 	//--------------------------------------------------------------------------
@@ -139,6 +141,8 @@ namespace CS529
 			{
 				colliderCircle->RegisterHandler(CollisionHandler);
 			}
+			physics->Drag(0.99f);
+
 			break;
 		case (cSpaceshipDead):
 			timer = spaceshipDeathDuration;
@@ -162,16 +166,32 @@ namespace CS529
 		case cSpaceshipIdle:
 			UpdateRotation();
 			UpdateWeapon(dt);
+			//UpdateDrag();
+
 			if (DGL_Input_KeyDown(VK_UP))
 			{
 				stateNext = cSpaceshipThrust;
 			}
+
+			if (DGL_Input_KeyDown(VK_DOWN))
+			{
+				stateNext = cSpaceshipReverse;
+			}
 			break;
 		case cSpaceshipThrust:
 			UpdateRotation();
-			UpdateVelocity(dt);
+			UpdateVelocity(dt, false);
 			UpdateWeapon(dt);
 			if (!DGL_Input_KeyDown(VK_UP))
+			{
+				stateNext = cSpaceshipIdle;
+			}
+			break;
+		case cSpaceshipReverse:
+			UpdateRotation();
+			UpdateVelocity(dt, true);
+			UpdateWeapon(dt);
+			if (!DGL_Input_KeyDown(VK_DOWN))
 			{
 				stateNext = cSpaceshipIdle;
 			}
@@ -216,7 +236,7 @@ namespace CS529
 		}
 	}
 
-	void BehaviorSpaceship::UpdateVelocity(float dt) const
+	void BehaviorSpaceship::UpdateVelocity(float dt, bool isReverseThrust) const
 	{
 		Physics* physics = Parent()->Get<Physics>();
 		Transform* transform = Parent()->Get<Transform>();
@@ -225,6 +245,8 @@ namespace CS529
 			float rotation = transform->Rotation();
 			Vector2D rotationDirectionVector;
 			rotationDirectionVector.FromAngleRad(rotation);
+
+			if (isReverseThrust) rotationDirectionVector.Scale(-1);
 
 			Vector2D velocity = physics->Velocity();
 			velocity.ScaleAdd(spaceshipAcceleration * dt, rotationDirectionVector);
@@ -237,6 +259,15 @@ namespace CS529
 			physics->Velocity(velocity);
 		}
 	}
+
+	//void BehaviorSpaceship::UpdateDrag() const
+	//{
+	//	Physics* physics = Parent()->Get<Physics>();
+	//	Vector2D velocity = physics->Velocity();
+
+	//	//velocity.Scale(physics.);
+	//	physics->Velocity(velocity);
+	//}
 
 	void BehaviorSpaceship::UpdateWeapon(float dt)
 	{

@@ -73,6 +73,8 @@ namespace CS529
 		// @brief     Set oldTranslation = translation
 		// @brief     Use the Vector2D::ScaleAdd function to perform the following calculation:
 		// @brief       velocity += acceleration * dt
+		// @brief     OPTIONAL FEATURE: Scale velocity by drag.
+		// @brief       [NOTE: The spaceship can be given a drag of 0.99f.  All other entities should have a drag of 1.0f.]
 		// @brief     Use the Vector2D::ScaleAdd function to perform the following calculation:
 		// @brief       translation += velocity * dt
 		// @brief     Store the new translation in the transform component.
@@ -106,8 +108,17 @@ namespace CS529
 		// @brief Change the acceleration value on the component.
 		void Acceleration(const Vector2D & acceleration) { this->acceleration = acceleration; }
 
+		// @brief Get the old translation value stored during Physics::Update.
+		//
+		// @return Vector2D& = The entity's previous translation value.
+		const Vector2D& OldTranslation() const { return oldTranslation; }
+
 		// @brief Change the rotational velocity of the component.
 		void RotationalVelocity(float newRotationalVelocity) { this->rotationalVelocity = newRotationalVelocity; }
+
+		// @brief Set a new drag value.
+		// @brief [NOTE: The use of drag is optional, but should be used ONLY for the spaceship entity.]
+		void Drag(float newDrag) { drag = newDrag; }
 
 		// Public Event Handlers
 	public:
@@ -137,6 +148,11 @@ namespace CS529
 		// @brief The rotational velocity applied to the entity's transform ever frame.
 		// @brief [HINT: transform->rotation += rotationalVelocity * dt.]
 		float rotationalVelocity{ 0.0f };
+
+		// @brief Optional variable to simulate drag.
+		// @brief [NOTE: A drag of 1.0f means no drag.  A drag of 0.0f will halt all movement.]
+		// @brief [NOTE: To use, multiply velocity by drag in Physics::Update.]
+		float drag{ 1.0f };
 	};
 
 }	// namespace
