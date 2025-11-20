@@ -84,8 +84,8 @@ namespace CS529
 
 		// Private Constants:
 	private:
-		const unsigned OmegaSpawnInitial = 0;
-		const unsigned OmegaSpawnMaximum = 0;
+		const unsigned OmegaSpawnInitial = 8;
+		const unsigned OmegaSpawnMaximum = 20;
 
 		// Private Static Variables:
 	private:

@@ -170,15 +170,7 @@ namespace CS529
 			{
 				for (int j = i + 1; j < entities.size(); ++j)
 				{
-					if (entities[i]->Name() == "Arena")
-					{
-						colliderB = entities[j]->Get<ColliderCircle>();
-					}
-					else
-					{
-						colliderB = entities[j]->Get<ColliderCircle>();
-					}
-
+					colliderB = entities[j]->Get<ColliderCircle>();
 					if (colliderB)
 					{
 						colliderA->CheckCollision(colliderB);

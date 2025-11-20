@@ -411,6 +411,9 @@
     <ClInclude Include="Source\OmegaScene.h">
       <Filter>Source Files\Game\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="Source\CollisionRecord.h">
+      <Filter>Source Files\Engine\Entities\Components\Collider</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Templates\TemplateComponent.vstemplate">

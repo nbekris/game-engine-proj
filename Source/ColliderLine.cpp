@@ -150,11 +150,11 @@ namespace CS529
 		float ti = 1.0f;
 		Vector2D v = Bs;
 		v.Sub(Be);
-		CollisionRecord collisionRecord(this->Parent(), circle->Parent(), Bs, Be);
-		for (const LineSegment& segment : lineSegments)
+		CollisionRecord collisionRecord(circle->Parent(), this->Parent(), Bs, Be);
+		for (int i = 0; i < lineSegments.size(); ++i)
 		{
-			Vector2D p0 = segment.p0;
-			Vector2D p1 = segment.p1;
+			Vector2D p0 = lineSegments[i].p0;
+			Vector2D p1 = lineSegments[i].p1;
 			Vector2D e(p1);
 			e.Sub(p0);
 			Vector2D n(e.y, -e.x);
@@ -165,45 +165,32 @@ namespace CS529
 				continue;
 			}
 
-			if ((n.DotProduct(Bs) <= n.DotProduct(p0) && (n.DotProduct(Be) < n.DotProduct(p0))))
+			if ((n.DotProduct(Bs) <= n.DotProduct(p0)) && (n.DotProduct(Be) < n.DotProduct(p0)))
 			{
 				continue;
 			}
 
-			if ((n.DotProduct(Bs) >= n.DotProduct(p0) && (n.DotProduct(Be))))
+			if ((n.DotProduct(Bs) >= n.DotProduct(p0)) && (n.DotProduct(Be) > n.DotProduct(p0)))
 			{
 				continue;
 			}
 
-			float t = (n.DotProduct(p0) - n.DotProduct(Bs)) / n.DotProduct(v);
-
-			if (t >= ti)
+			float ti = (n.DotProduct(p0) - n.DotProduct(Bs)) / n.DotProduct(v);
+			if (ti >= collisionRecord.ti)
 			{
 				continue;
 			}
-
-			ti = t;
 
 			Vector2D Bi(Bs);
 			v.Scale(ti);
 			Bi.Add(v);
 
-			//Vector2D p1Check(p1);
-			//Vector2D p0Check(p0);
-			//Vector2D Bi1Check(Bi);
-			//Vector2D Bi0Check(Bi);
-
-			//p1Check.Sub(p0);
-			//Bi1Check.Sub(p0);
-			//p0Check.Sub(p1);
-			//Bi0Check.Sub(p1);
-
-			if (IsOutsideSegment(Bi, p1, p0)/*p1Check.DotProduct(Bi1Check) < 0*/)
+			if (IsOutsideSegment(Bi, p1, p0))
 			{
 				continue;
 			}
 
-			if (IsOutsideSegment(Bi, p0, p1)/*p0Check.DotProduct(Bi0Check) < 0*/)
+			if (IsOutsideSegment(Bi, p0, p1))
 			{
 				continue;
 			}
@@ -213,12 +200,11 @@ namespace CS529
 			continue;
 
 
-			// Intersection test goes here
 		}
 
 		if (collisionRecord.ti < 1.0f)
 		{
-			Reflect(collisionRecord);
+ 			Reflect(collisionRecord);
 			return true;
 		}
 
@@ -236,27 +222,36 @@ namespace CS529
 
 	void ColliderLine::Reflect(const CollisionRecord& collision) const
 	{
+		// Calculate the incident vector (i = Be - Bi).
 		Vector2D i = collision.Be;
 		i.Sub(collision.Bi);
 
+		// Calculate the penetration vector (s).
 		Vector2D s = collision.n;
 		s.Scale(i.DotProduct(s));
 
+		// Calculate the "reflection" vector (r).
 		Vector2D r = i;
 		s.Scale(2.0f);
 		r.Sub(s);
 
+		// Calculate the new end point (Br).
 		Vector2D Br(collision.Bi);
 		Br.Add(r);
 
-		ColliderCircle* circle = collision.entityA->Get<ColliderCircle>();
-		Transform tr = collision.entityA->Get<Transform>();
-		Physics ph = collision.entityA->Get<Physics>();
+		Transform* tr = collision.entityA->Get<Transform>();
+		Physics* ph = collision.entityA->Get<Physics>();
 
-		tr.Translation(Br);
-		float angle = atan2f(r.y, r.x);
-		tr.Rotation(angle);
-		ph.Velocity(r);
+		tr->Translation(Br);
+		float angle = r.ToAngleRad();
+		tr->Rotation(angle);
+
+		Vector2D oldVel = ph->Velocity();
+		float speed = oldVel.Length();
+		r.Normalize();
+		r.Scale(speed);
+		Vector2D vel = r;
+		ph->Velocity(vel);
 	}
 
 #pragma region Private Functions

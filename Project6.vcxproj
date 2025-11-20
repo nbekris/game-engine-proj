@@ -421,6 +421,7 @@
     </ClInclude>
     <ClInclude Include="Source\Collider.h" />
     <ClInclude Include="Source\ColliderCircle.h" />
+    <ClInclude Include="Source\CollisionRecord.h" />
     <ClInclude Include="Source\Color.h" />
     <ClInclude Include="Source\Component.h" />
     <ClInclude Include="Source\Container.h">
