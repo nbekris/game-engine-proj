@@ -222,20 +222,20 @@ namespace CS529
 
 	void ColliderLine::Reflect(const CollisionRecord& collision) const
 	{
-		// Calculate the incident vector (i = Be - Bi).
+		// Calculate the incident vector (i = Be - Bi)
 		Vector2D i = collision.Be;
 		i.Sub(collision.Bi);
 
-		// Calculate the penetration vector (s).
+		// Calculate the penetration vector (s)
 		Vector2D s = collision.n;
 		s.Scale(i.DotProduct(s));
 
-		// Calculate the "reflection" vector (r).
+		// Calculate the "reflection" vector (r)
 		Vector2D r = i;
 		s.Scale(2.0f);
 		r.Sub(s);
 
-		// Calculate the new end point (Br).
+		// Calculate the new end point (Br)
 		Vector2D Br(collision.Bi);
 		Br.Add(r);
 
@@ -252,6 +252,8 @@ namespace CS529
 		r.Scale(speed);
 		Vector2D vel = r;
 		ph->Velocity(vel);
+
+		IntersectAndReflect(collision.entityA->Get<ColliderCircle>(), collision.Bi, tr->Translation());
 	}
 
 #pragma region Private Functions
