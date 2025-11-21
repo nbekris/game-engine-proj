@@ -79,8 +79,8 @@
     <LibraryPath>$(ProjectDir)\Libraries\DGL\lib\$(Platform);$(ProjectDir)\Libraries\DLL\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)\Libraries\DGL\inc;$(ProjectDir)\Libraries\DLL\include;$(ProjectDir)\Libraries;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)\Libraries\DGL\lib\$(Platform);$(ProjectDir)\Libraries\DLL\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\Libraries\DGL\inc;$(ProjectDir)\Libraries\DLL\include;$(ProjectDir)\Libraries;$(ProjectDir)\Libraries\FMOD\core\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\Libraries\DGL\lib\$(Platform);$(ProjectDir)\Libraries\DLL\lib;$(ProjectDir)\Libraries\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)\Libraries\DGL\inc;$(ProjectDir)\Libraries\DLL\include;$(ProjectDir)\Libraries;$(IncludePath)</IncludePath>
@@ -135,11 +135,13 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp23</LanguageStandard>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dragon.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dragon.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\MastersHW\GameEngine\game-engine-proj\Libraries\FMOD\core\inc;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(ProjectDir)\Libraries\DGL\lib\$(Platform)\DGL_d.dll" "$(OutDir)" /s /r /y /q</Command>
@@ -206,6 +208,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Source\AsteroidsScene.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Source\AudioSystem.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -388,6 +394,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Source\AsteroidsScene.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Source\AudioSystem.h">
       <SubType>
       </SubType>
     </ClInclude>

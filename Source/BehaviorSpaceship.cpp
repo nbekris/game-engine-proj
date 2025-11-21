@@ -51,7 +51,6 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Public Variables:
 	//--------------------------------------------------------------------------
-	float drag = 0.0f;
 	//--------------------------------------------------------------------------
 	// Private Static Constants:
 	//--------------------------------------------------------------------------
@@ -166,7 +165,6 @@ namespace CS529
 		case cSpaceshipIdle:
 			UpdateRotation();
 			UpdateWeapon(dt);
-			//UpdateDrag();
 
 			if (DGL_Input_KeyDown(VK_UP))
 			{
@@ -259,15 +257,6 @@ namespace CS529
 			physics->Velocity(velocity);
 		}
 	}
-
-	//void BehaviorSpaceship::UpdateDrag() const
-	//{
-	//	Physics* physics = Parent()->Get<Physics>();
-	//	Vector2D velocity = physics->Velocity();
-
-	//	//velocity.Scale(physics.);
-	//	physics->Velocity(velocity);
-	//}
 
 	void BehaviorSpaceship::UpdateWeapon(float dt)
 	{

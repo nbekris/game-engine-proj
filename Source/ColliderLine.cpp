@@ -252,6 +252,8 @@ namespace CS529
 		r.Scale(speed);
 		Vector2D vel = r;
 		ph->Velocity(vel);
+
+		IntersectAndReflect(collision.entityA->Get<ColliderCircle>(), collision.Bi, tr->Translation());
 	}
 
 #pragma region Private Functions

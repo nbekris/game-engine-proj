@@ -86,6 +86,9 @@
     <Filter Include="JSON Files\Data\SpriteSources">
       <UniqueIdentifier>{b84c50a1-a39d-4aa7-bbd9-b693d21b47da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Systems\Audio">
+      <UniqueIdentifier>{decf2934-7126-4611-aef1-950c35328e2b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Precompiled.cpp">
@@ -246,6 +249,9 @@
     </ClCompile>
     <ClCompile Include="Source\ColliderLine.cpp">
       <Filter>Source Files\Engine\Entities\Components\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AudioSystem.cpp">
+      <Filter>Source Files\Engine\Systems\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -413,6 +419,9 @@
     </ClInclude>
     <ClInclude Include="Source\CollisionRecord.h">
       <Filter>Source Files\Engine\Entities\Components\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AudioSystem.h">
+      <Filter>Source Files\Engine\Systems\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
