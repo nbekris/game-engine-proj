@@ -80,7 +80,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(ProjectDir)\Libraries\DGL\inc;$(ProjectDir)\Libraries\DLL\include;$(ProjectDir)\Libraries;$(ProjectDir)\Libraries\FMOD\core\inc;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)\Libraries\DGL\lib\$(Platform);$(ProjectDir)\Libraries\DLL\lib;$(ProjectDir)\Libraries\lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)\Libraries\DGL\lib\$(Platform);$(ProjectDir)\Libraries\DLL\lib;$(ProjectDir)\Libraries\lib\x64;C:\Game Engine\game-engine-proj\Libraries\FMOD\core\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)\Libraries\DGL\inc;$(ProjectDir)\Libraries\DLL\include;$(ProjectDir)\Libraries;$(IncludePath)</IncludePath>
@@ -228,6 +228,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Source\BehaviorHudText.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Source\BehaviorAudio.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -414,6 +418,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Source\BehaviorHudText.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Source\BehaviorAudio.h">
       <SubType>
       </SubType>
     </ClInclude>

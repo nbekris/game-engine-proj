@@ -1,10 +1,11 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	OmegaScene.cpp
+// File Name:	BehaviorMusic.cpp
 // Author(s):	bekri
 // Course:		CS529F25
-// Project:		Project 1
-// Purpose:		Template class for a new scene.
+// Project:		Project 4
+// Purpose:		This derived class is responsible for the behavior associated
+//   with a "template" entity.
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
 //
@@ -15,20 +16,11 @@
 //------------------------------------------------------------------------------
 
 #include "Precompiled.h"
-#include <Windows.h>
 
-#include "OmegaScene.h"
-#include "Scene.h"
-#include "SceneSystem.h"
-
-#include "EntityFactory.h"
-#include "MeshLibrary.h"
-#include "Mesh.h"
 #include "Entity.h"
-#include "Transform.h"
-#include "Sprite.h"
-#include "ScoreSystem.h"
-#include "SpriteSourceLibrary.h"
+#include "Behavior.h"
+#include "BehaviorMusic.h"
+#include "Stream.h"
 
 //------------------------------------------------------------------------------
 // External Declarations:
@@ -55,7 +47,7 @@ namespace CS529
 	//--------------------------------------------------------------------------
 	// Private Static Constants:
 	//--------------------------------------------------------------------------
-	static const DGL_Color DGL_Color_Black = { 0.0f, 0.0f, 0.0f, 1.0f };
+
 	//--------------------------------------------------------------------------
 	// Private Constants:
 	//--------------------------------------------------------------------------
@@ -74,10 +66,14 @@ namespace CS529
 
 #pragma region Constructors
 
-	OmegaScene::OmegaScene()
-		: Scene("OmegaScene")
+	BehaviorMusic::BehaviorMusic(void)
+		: Behavior()
 	{
-		OmegaSpawnCount = OmegaSpawnInitial;
+	}
+
+	BehaviorMusic::BehaviorMusic(const BehaviorMusic* other)
+		: Behavior(other)
+	{
 	}
 
 #pragma endregion Constructors
@@ -104,97 +100,52 @@ namespace CS529
 
 #pragma region Private Functions
 
-	void OmegaScene::Load()
+	void BehaviorMusic::Read(Stream& stream)
 	{
-		ScoreSystem::Instance().NewGame();
+		stream.PushNode("BehaviorMusic");
+
+		// Read the base Behavior variables.
+		// [HINT: Behavior::Read().]
+		Behavior::Read(stream);
+
+		// Read the derived class Behavior variables, if any.
+
+		stream.PopNode();
 	}
 
-	bool OmegaScene::Initialize()
+	void BehaviorMusic::onInit()
 	{
-		Entity* arenaEntity = EntityFactory::Build("Arena");
-		if (arenaEntity)
+		switch (stateCurr)
 		{
-			this->AddEntity(arenaEntity);
+		case cIdle:
+			break;
+
+		default:
+			break;
 		}
-		Entity* spaceshipEntity = EntityFactory::Build("SpaceshipOmega");
+	}
 
-		if (spaceshipEntity)
+	void BehaviorMusic::onUpdate(float dt)
+	{
+		switch (stateCurr)
 		{
-			this->AddEntity(spaceshipEntity);
+		case cIdle:
+			break;
+
+		default:
+			break;
 		}
-
-		DGL_Graphics_SetBackgroundColor(&DGL_Color_Black);
-		DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
-
-		Entity* scoreEntity = EntityFactory::Build("OmegaScore");
-		Entity* highScoreEntity = EntityFactory::Build("OmegaHighScore");
-		Entity* OmegaWaveEntity = EntityFactory::Build("OmegaWaveCount");
-
-		this->AddEntity(scoreEntity);
-		this->AddEntity(highScoreEntity);
-		this->AddEntity(OmegaWaveEntity);
-
-		Entity* backingAudioEntity = EntityFactory::Build("OmegaBackingAudio");
-		Entity* effectsAudioEntity = EntityFactory::Build("OmegaEffectsAudio");
-
-		ScoreSystem::Instance().Reset();
-		OmegaSpawnCount = OmegaSpawnInitial;
-
-		return true;
 	}
 
-	void OmegaScene::Update(float dt)
+	void BehaviorMusic::onExit()
 	{
-		// Tell the compiler that the 'dt' variable is unused.
-		UNREFERENCED_PARAMETER(dt);
-
-		if (!FindEntity("Asteroid"))
+		switch (stateCurr)
 		{
-			SpawnWave();
-		}
+		case cIdle:
+			break;
 
-		UpdateEntities(dt);
-
-		CheckCollisions();
-		// NOTE: This call causes the engine to exit immediately.
-		//   Make sure to remove it when you are ready to test out a new scene.
-	}
-
-	void OmegaScene::Render() const
-	{
-		RenderEntities();
-	}
-
-	void OmegaScene::Shutdown()
-	{
-		DeleteEntities();
-		EntityFactory::DeleteAll();
-	}
-
-	void OmegaScene::Unload()
-	{
-		MeshLibrary::DeleteAll();
-		SpriteSourceLibrary::DeleteAll();
-	}
-
-	void OmegaScene::SpawnWave()
-	{
-		ScoreSystem::Instance().IncreaseWave();
-		for (unsigned int i = 0; i < OmegaSpawnCount; ++i)
-		{
-			SpawnAsteroid();
-		}
-
-		OmegaSpawnCount = OmegaSpawnCount != OmegaSpawnMaximum ? ++OmegaSpawnCount : OmegaSpawnMaximum;
-	}
-
-	void OmegaScene::SpawnAsteroid()
-	{
-		Entity* entity = EntityFactory::Build("Asteroid");
-		if (entity)
-		{
-			AddEntity(entity);
-			entity->Get<Transform>()->Translation({ 0.0f, 0.0f });
+		default:
+			break;
 		}
 	}
 

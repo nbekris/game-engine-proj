@@ -1,0 +1,11 @@
+{
+  "Entity": {
+    "Name": "OmegaBackingAudio",
+    "Components": {
+      "BehaviorAudio": {
+        "IsLooped": true,
+        "Name": "Nasteroids.wav"
+      }
+    }
+  }
+}

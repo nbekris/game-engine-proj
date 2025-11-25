@@ -273,6 +273,7 @@ namespace CS529
 			if (DGL_Input_KeyDown(VK_SPACE))
 			{
 				SpawnBullet();
+				//PlayAudio(audioId);
 				timer = spaceshipWeaponCooldownTime;
 			}
 		}
