@@ -253,7 +253,10 @@
     <ClCompile Include="Source\AudioSystem.cpp">
       <Filter>Source Files\Engine\Systems\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Source\BehaviorAudio.cpp">
+    <ClCompile Include="Source\BehaviorMusic.cpp">
+      <Filter>Source Files\Game\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BehaviorSound.cpp">
       <Filter>Source Files\Game\Behaviors</Filter>
     </ClCompile>
   </ItemGroup>
@@ -426,7 +429,10 @@
     <ClInclude Include="Source\AudioSystem.h">
       <Filter>Source Files\Engine\Systems\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Source\BehaviorAudio.h">
+    <ClInclude Include="Source\BehaviorMusic.h">
+      <Filter>Source Files\Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BehaviorSound.h">
       <Filter>Source Files\Game\Behaviors</Filter>
     </ClInclude>
   </ItemGroup>

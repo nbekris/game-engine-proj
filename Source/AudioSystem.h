@@ -74,7 +74,7 @@ namespace CS529
 
 		void LoadSound(const std::string& filename);
 
-		void StreamSound(const std::string& filename, bool isLooped);
+		void StreamMusic(const std::string& filename, bool isLooped);
 
 		void PlaySFX();
 		void PlayMusic();

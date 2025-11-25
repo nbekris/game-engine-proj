@@ -231,7 +231,11 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="Source\BehaviorAudio.cpp">
+    <ClCompile Include="Source\BehaviorMusic.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Source\BehaviorSound.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -421,7 +425,11 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Source\BehaviorAudio.h">
+    <ClInclude Include="Source\BehaviorMusic.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Source\BehaviorSound.h">
       <SubType>
       </SubType>
     </ClInclude>
